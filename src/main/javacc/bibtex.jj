@@ -374,5 +374,5 @@ private String Literal(int depth, String delimiter){
 
 	token_source.SwitchTo(DEFAULT);
 
-	return sb.toString();
+	return StringUtil.removeIndent(sb.toString());
 }
