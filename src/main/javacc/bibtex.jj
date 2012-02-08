@@ -373,24 +373,26 @@ private Value SimpleValue() :
 }
 
 JAVACODE
-private String Literal(int depth, String delimiter){
+private String Literal(int braceLevel, String delimiter){
 	StringBuffer sb = new StringBuffer(64);
 
-	token_source.SwitchTo(IN_LITERAL);
+	if(braceLevel < 0){
+		throw new IllegalArgumentException();
+	}
 
-	int nestingDepth = depth;
+	token_source.SwitchTo(IN_LITERAL);
 
 	for(Token token = getNextToken(); true; token = getNextToken()){
 
 		if("{".equals(token.image)){
-			nestingDepth++;
+			braceLevel++;
 		} else
 
 		if("}".equals(token.image)){
-			nestingDepth--;
+			braceLevel--;
 		} // End if
 
-		if(delimiter.equals(token.image) && nestingDepth == 0){
+		if(delimiter.equals(token.image) && braceLevel == 0){
 			break;
 		}
 
