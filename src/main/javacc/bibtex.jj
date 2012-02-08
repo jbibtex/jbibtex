@@ -1,0 +1,378 @@
+/*
+ * Copyright (c) 2012 University of Tartu
+ */
+PARSER_BEGIN(BibTeXParser)
+package org.jbibtex;
+
+import java.io.*;
+import java.util.*;
+
+public class BibTeXParser {
+
+	static
+	public void main(String[] args) throws Exception {
+		Reader reader = new FileReader(args[0]);
+
+		try {
+			BibTeXParser parser = new BibTeXParser();
+
+			BibTeXDatabase database = parser.parse(reader);
+
+			List<BibTeXObject> objects = database.getObjects();
+			for(BibTeXObject object : objects){
+				System.out.println(object);
+			}
+		} finally {
+			reader.close();
+		}
+	}
+
+	public BibTeXParser(){
+		this(new StringReader(""));
+	}
+
+	static
+	private class Field {
+
+		private Key key = null;
+
+		private Value value = null;
+
+
+		private Field(Key key, Value value){
+			setKey(key);
+			setValue(value);
+		}
+
+		public Key getKey(){
+			return this.key;
+		}
+
+		private void setKey(Key key){
+			this.key = key;
+		}
+
+		public Value getValue(){
+			return this.value;
+		}
+
+		private void setValue(Value value){
+			this.value = value;
+		}
+	}
+}
+
+PARSER_END(BibTeXParser)
+
+<DEFAULT>
+MORE :
+{
+	"%" : IN_INLINE_COMMENT
+}
+
+<IN_INLINE_COMMENT>
+SPECIAL_TOKEN :
+{
+	< INLINE_COMMENT : ( ~["\r", "\n"] )* ("\r" | "\n" | "\r\n")? > : DEFAULT
+}
+
+<IN_INLINE_COMMENT>
+MORE :
+{
+	< ~[] >
+}
+
+<IN_LITERAL>
+TOKEN :
+{
+	< TEXT : ~[] >
+}
+
+<DEFAULT>
+SKIP :
+{
+	"\t"
+	|
+	"\n"
+	|
+	"\f"
+	|
+	"\r"
+	|
+	" "
+}
+
+<DEFAULT>
+TOKEN :
+{
+	< AT : "@" >
+	|
+	< COMMA : "," >
+	|
+	< EQUALS : "=" >
+	|
+	< LBRACE : "{">
+	|
+	< LPAREN : "(" >
+	|
+	< QUOTE : "\"" >
+	|
+	< RBRACE : "}" >
+	|
+	< RPAREN : ")" > 
+	|
+	< SHARP : "#" >
+}
+
+<DEFAULT>
+TOKEN :
+{
+	< COMMENT : ( ["c", "C"] ["o", "O"] ["m", "M"] ["m", "M"] ["e", "E"] ["n", "N"] ["t", "T"] ) >
+	|
+	< INCLUDE : ( ["i", "I"] ["n", "N"] ["c", "C"] ["l", "L"] ["u", "U"] ["d", "D"] ["e", "E"] ) >
+	|
+	< PREAMBLE : ( ["p", "P"] ["r", "R"] ["e", "E"] ["a", "A"] ["m", "M"] ["b", "B"] ["l", "L"] ["e", "E"] ) >
+	|
+	< STRING : ( ["s", "S"] ["t", "T"] ["r", "R"] ["i", "I"] ["n", "N"] ["g", "G"] ) >
+}
+
+<DEFAULT>
+TOKEN :
+{
+	< NAME : ( ["a"-"z", "A"-"Z"] ( ["a"-"z", "A"-"Z", "0"-"9", ":", ".", "-", "+", "/", "'"] )* ) >
+	|
+	< DIGITS : ( ["0"-"9"] )+ >
+}
+
+public BibTeXDatabase parse(Reader reader) :
+{
+	BibTeXDatabase database = new BibTeXDatabase();
+
+	ReInit(reader);
+
+	BibTeXObject object = null;
+}
+{
+	( object = Object() { database.addObject(object); } )* <EOF>
+
+	{
+		return database;
+	}
+}
+
+private BibTeXObject Object() :
+{
+	BibTeXObject object;
+}
+{
+	(
+		LOOKAHEAD( <AT> <COMMENT> )
+		object = Comment()
+		|
+		LOOKAHEAD( <AT> <PREAMBLE> )
+		object = Preamble()
+		|
+		LOOKAHEAD( <AT> <STRING> )
+		object = String()
+		|
+		object = Entry()
+	)
+
+	{
+		return object;
+	}
+}
+
+private BibTeXComment Comment() :
+{
+	String string;
+}
+{
+	<AT> <COMMENT>
+	(
+		<LBRACE> string = Literal(1, "}") <RBRACE>
+	)
+
+	{
+		return new BibTeXComment(new StringValue(string));
+	}
+}
+
+private BibTeXPreamble Preamble() :
+{
+	Value value;
+}
+{
+	<AT> <PREAMBLE>
+	(
+		<LPAREN> value = Value() <RPAREN>
+		|
+		<LBRACE> value = Value() <RBRACE>
+	)
+
+	{
+		return new BibTeXPreamble(value);
+	}
+}
+
+private BibTeXString String() :
+{
+	Field field;
+}
+{
+	<AT> <STRING>
+	(
+		<LPAREN> field = Assignment() <RPAREN>
+		|
+		<LBRACE> field = Assignment() <RBRACE>
+	)
+
+	{
+		return new BibTeXString(field.getKey(), field.getValue());
+	}
+}
+
+private BibTeXEntry Entry() :
+{
+	Token type;
+
+	Token key;
+
+	List<Field> fields;
+}
+{
+	<AT> type = <NAME>
+	(
+		<LPAREN> key = <NAME> <COMMA> fields = AssignmentList() ( <COMMA> )? <RPAREN>
+		|
+		<LBRACE> key = <NAME> <COMMA> fields = AssignmentList() ( <COMMA> )? <RBRACE>
+	)
+
+	{
+		BibTeXEntry entry = new BibTeXEntry(new Key(type.image), new Key(key.image));
+
+		for(Field field : fields){
+			entry.addField(field.getKey(), field.getValue());
+		}
+
+		return entry;
+	}
+}
+
+private Field Assignment() :
+{
+	Key key;
+
+	Value value;
+}
+{
+	key = Key() <EQUALS> value = Value()
+
+	{
+		return new Field(key, value);
+	}
+}
+
+private List<Field> AssignmentList() :
+{
+	List<Field> fields = new ArrayList<Field>();
+
+	Field field;
+}
+{
+	field = Assignment() { fields.add(field); } ( LOOKAHEAD( <COMMA> <NAME> ) <COMMA> field = Assignment() { fields.add(field); } )*
+
+	{
+		return fields;
+	}
+}
+
+private Key Key() :
+{
+	Token token;
+}
+{
+	token = <NAME>
+
+	{
+		return new Key(token.image);
+	}
+}
+
+private Value Value() :
+{
+	Value left;
+
+	Value right = null;
+}
+{
+	left = SimpleValue() ( <SHARP> right = Value() )?
+
+	{
+		if(right != null){
+			return new ConcateValue(left, right);
+		}
+
+		return left;
+	}
+}
+
+private Value SimpleValue() :
+{
+	String string;
+
+	Token token;
+}
+{
+	(
+		<QUOTE> string = Literal(0, "\"")
+		{
+			return new StringValue(string);
+		}
+		|
+		<LBRACE> string = Literal(1, "}")
+		{
+			return new StringValue(string);
+		}
+		|
+		token = <NAME>
+		{
+			return new ReferenceValue(new Key(token.image));
+		}
+		|
+		token = <DIGITS>
+		{
+			return new DigitStringValue(token.image);
+		}
+	)
+}
+
+JAVACODE
+private String Literal(int depth, String delimiter){
+	StringBuffer sb = new StringBuffer(64);
+
+	token_source.SwitchTo(IN_LITERAL);
+
+	int nestingDepth = depth;
+
+	for(Token token = getNextToken(); true; token = getNextToken()){
+
+		if("{".equals(token.image)){
+			nestingDepth++;
+		} else
+
+		if("}".equals(token.image)){
+			nestingDepth--;
+		} // End if
+
+		if(delimiter.equals(token.image) && nestingDepth == 0){
+			break;
+		}
+
+		sb.append(token.image);
+	}
+
+	token_source.SwitchTo(DEFAULT);
+
+	return sb.toString();
+}
