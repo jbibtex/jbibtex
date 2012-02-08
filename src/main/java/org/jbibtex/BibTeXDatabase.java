@@ -51,7 +51,12 @@ public class BibTeXDatabase {
 	}
 
 	public BibTeXString getString(Key key){
-		return this.strings.get(key);
+		BibTeXString string = this.strings.get(key);
+		if(string == null){
+			string = BibTeXDatabase.macros.get(key);
+		}
+
+		return string;
 	}
 
 	public Map<Key, BibTeXString> getStrings(){
@@ -59,10 +64,39 @@ public class BibTeXDatabase {
 	}
 
 	public BibTeXEntry getEntry(Key key){
-		return this.entries.get(key);
+		BibTeXEntry entry = this.entries.get(key);
+
+		return entry;
 	}
 
 	public Map<Key, BibTeXEntry> getEntries(){
 		return Collections.unmodifiableMap(this.entries);
+	}
+
+	private static KeyMap<BibTeXString> macros = new KeyMap<BibTeXString>();
+
+	static
+	public void addMacro(String key, String value){
+		addMacro(new BibTeXString(new Key(key), new StringValue(value, StringValue.Style.BRACED)));
+	}
+
+	static
+	public void addMacro(BibTeXString macro){
+		BibTeXDatabase.macros.put(macro.getKey(), macro);
+	}
+
+	static {
+		addMacro("jan", "January");
+		addMacro("feb", "February");
+		addMacro("mar", "March");
+		addMacro("apr", "April");
+		addMacro("may", "May");
+		addMacro("jun", "June");
+		addMacro("jul", "July");
+		addMacro("aug", "August");
+		addMacro("sep", "September");
+		addMacro("oct", "October");
+		addMacro("nov", "November");
+		addMacro("dec", "December");
 	}
 }

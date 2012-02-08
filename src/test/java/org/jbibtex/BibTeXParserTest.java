@@ -14,6 +14,8 @@ public class BibTeXParserTest {
 
 	@Test
 	public void parseUnix() throws Exception {
+		BibTeXDatabase.addMacro("ack-jsq", "ack-jsq");
+
 		BibTeXDatabase database = parse("/unix.bib");
 
 		List<BibTeXObject> objects = database.getObjects();

@@ -9,6 +9,9 @@ import java.util.*;
 
 public class BibTeXParser {
 
+	private BibTeXDatabase database = null;
+
+
 	static
 	public void main(String[] args) throws Exception {
 		Reader reader = new FileReader(args[0]);
@@ -30,6 +33,15 @@ public class BibTeXParser {
 	public BibTeXParser(){
 		this(new StringReader(""));
 	}
+
+	public BibTeXDatabase getDatabase(){
+		return this.database;
+	}
+
+	private void setDatabase(BibTeXDatabase database){
+		this.database = database;
+	}
+
 
 	static
 	private class Field {
@@ -153,9 +165,15 @@ public BibTeXDatabase parse(Reader reader) :
 	BibTeXObject object = null;
 }
 {
+	{
+		setDatabase(database);
+	}
+
 	( object = Object() { database.addObject(object); } )* <EOF>
 
 	{
+		setDatabase(null);
+
 		return database;
 	}
 }
@@ -337,7 +355,14 @@ private Value SimpleValue() :
 		|
 		token = <NAME>
 		{
-			return new ReferenceValue(new Key(token.image));
+			Key key = new Key(token.image);
+
+			BibTeXString object = getDatabase().getString(key); 
+			if(object == null){
+				throw new ObjectResolutionException(key);
+			}
+
+			return new ReferenceValue(key, object);
 		}
 		|
 		token = <DIGITS>
