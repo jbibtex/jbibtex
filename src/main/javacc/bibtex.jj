@@ -194,7 +194,7 @@ private BibTeXComment Comment() :
 	)
 
 	{
-		return new BibTeXComment(new StringValue(string));
+		return new BibTeXComment(new StringValue(string, StringValue.Style.BRACED));
 	}
 }
 
@@ -325,14 +325,14 @@ private Value SimpleValue() :
 }
 {
 	(
-		<QUOTE> string = Literal(0, "\"")
-		{
-			return new StringValue(string);
-		}
-		|
 		<LBRACE> string = Literal(1, "}")
 		{
-			return new StringValue(string);
+			return new StringValue(string, StringValue.Style.BRACED);
+		}
+		|
+		<QUOTE> string = Literal(0, "\"")
+		{
+			return new StringValue(string, StringValue.Style.QUOTED);
 		}
 		|
 		token = <NAME>
