@@ -5,36 +5,32 @@ package org.jbibtex;
 
 public class ReferenceValue extends Value {
 
-	private Key key = null;
+	private KeyValue value = null;
 
 	private BibTeXString string = null;
 
 
-	public ReferenceValue(Key key, BibTeXString string){
-		setKey(key);
+	public ReferenceValue(KeyValue value, BibTeXString string){
+		setValue(value);
 		setString(string);
 	}
 
 	@Override
 	protected String format(){
-		Key key = getKey();
-
-		return key.getValue();
+		return getValue().format();
 	}
 
 	@Override
 	public String toString(){
-		Value value = getString().getValue();
-
-		return value.toString();
+		return getValue().toString();
 	}
 
-	public Key getKey(){
-		return this.key;
+	public KeyValue getValue(){
+		return this.value;
 	}
 
-	private void setKey(Key key){
-		this.key = key;
+	private void setValue(KeyValue value){
+		this.value = value;
 	}
 
 	public BibTeXString getString(){

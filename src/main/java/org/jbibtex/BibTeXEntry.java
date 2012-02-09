@@ -19,10 +19,10 @@ public class BibTeXEntry extends BibTeXObject {
 		setKey(key);
 	}
 
-	public BibTeXEntry getCrossRef(){
+	public BibTeXEntry getCrossReference(){
 		Value value = this.fields.get(CROSSREF);
 
-		CrossRefValue crossRefValue = (CrossRefValue)value;
+		CrossReferenceValue crossRefValue = (CrossReferenceValue)value;
 		if(crossRefValue != null){
 			return crossRefValue.getEntry();
 		}
@@ -33,7 +33,7 @@ public class BibTeXEntry extends BibTeXObject {
 	public Value getField(Key key){
 		Value value = this.fields.get(key);
 		if(value == null){
-			BibTeXEntry entry = getCrossRef();
+			BibTeXEntry entry = getCrossReference();
 			if(entry != null){
 				return entry.getField(key);
 			}

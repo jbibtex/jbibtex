@@ -3,20 +3,20 @@
  */
 package org.jbibtex;
 
-public class CrossRefValue extends Value {
+public class CrossReferenceValue extends Value {
 
 	private Value value = null;
 
 	private BibTeXEntry entry = null;
 
 
-	public CrossRefValue(Value value, BibTeXEntry entry){
+	public CrossReferenceValue(Value value, BibTeXEntry entry){
 		setValue(value);
 		setEntry(entry);
 	}
 
 	@Override
-	public String format(){
+	protected String format(){
 		return getValue().format();
 	}
 

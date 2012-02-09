@@ -16,14 +16,14 @@ public class BibTeXParser {
 		this(new StringReader(""));
 	}
 
-	private void resolveCrossrefs(){
+	private void resolveCrossReferences(){
 		Map<Key, BibTeXEntry> entries = getDatabase().getEntries();
 
 		for(BibTeXEntry entry : entries.values()){
 			Map<Key, Value> fields = entry.getFields();
 
 			Value value = fields.get(BibTeXEntry.CROSSREF);
-			if((value == null) || (value instanceof CrossRefValue)){
+			if((value == null) || (value instanceof CrossReferenceValue)){
 				continue;
 			}
 
@@ -34,7 +34,7 @@ public class BibTeXParser {
 				throw new ObjectResolutionException(key);
 			}
 
-			entry.addField(BibTeXEntry.CROSSREF, new CrossRefValue(value, object));
+			entry.addField(BibTeXEntry.CROSSREF, new CrossReferenceValue(value, object));
 		}
 	}
 
@@ -176,7 +176,7 @@ public BibTeXDatabase parse(Reader reader) :
 	( object = Object() { database.addObject(object); } )* <EOF>
 
 	{
-		resolveCrossrefs();
+		resolveCrossReferences();
 
 		setDatabase(null);
 
@@ -361,14 +361,16 @@ private Value SimpleValue() :
 		|
 		token = <NAME>
 		{
-			Key key = new Key(token.image);
+			KeyValue value = new KeyValue(token.image);
+
+			Key key = value.toKey();
 
 			BibTeXString object = getDatabase().getString(key); 
 			if(object == null){
 				throw new ObjectResolutionException(key);
 			}
 
-			return new ReferenceValue(key, object);
+			return new ReferenceValue(value, object);
 		}
 		|
 		token = <DIGITS>
