@@ -214,7 +214,7 @@ private BibTeXComment Comment() :
 {
 	<AT> <COMMENT>
 	(
-		<LBRACE> string = Literal(1, "}") <RBRACE>
+		<LBRACE> string = Literal(1, "}")
 	)
 
 	{
