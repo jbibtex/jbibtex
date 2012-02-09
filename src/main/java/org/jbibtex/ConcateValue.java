@@ -15,6 +15,11 @@ public class ConcateValue extends Value {
 		setRight(right);
 	}
 
+	@Override
+	public String toString(){
+		return getLeft().toString() + getRight().toString();
+	}
+
 	public Value getLeft(){
 		return this.left;
 	}

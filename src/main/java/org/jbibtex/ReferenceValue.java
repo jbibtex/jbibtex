@@ -15,6 +15,13 @@ public class ReferenceValue extends Value {
 		setString(string);
 	}
 
+	@Override
+	public String toString(){
+		Value value = getString().getValue();
+
+		return value.toString();
+	}
+
 	public Key getKey(){
 		return this.key;
 	}

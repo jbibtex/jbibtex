@@ -13,6 +13,11 @@ public class LiteralValue extends Value {
 		setString(string);
 	}
 
+	@Override
+	public String toString(){
+		return getString();
+	}
+
 	public String getString(){
 		return this.string;
 	}
