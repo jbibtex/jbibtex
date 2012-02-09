@@ -14,6 +14,13 @@ public class StringValue extends LiteralValue {
 		setStyle(style);
 	}
 
+	@Override
+	protected String format(){
+		Style style = getStyle();
+
+		return style.getBegin() + getString() + style.getEnd();
+	}
+
 	public Style getStyle(){
 		return this.style;
 	}

@@ -10,9 +10,20 @@ public class StringUtil {
 
 	static
 	public String addIndent(String string, String indent){
+		return addIndent(string, 1, indent);
+	}
+
+	static
+	public String addIndent(String string, int level, String indent){
 
 		if(string.indexOf('\n') > -1){
-			string = string.replaceAll("\\n", "\n" + indent);
+			String levelIndent = indent;
+
+			for(int i = 1; i < level; i++){
+				levelIndent += indent;
+			}
+
+			string = string.replaceAll("\\n", "\n" + levelIndent);
 		}
 
 		return string;

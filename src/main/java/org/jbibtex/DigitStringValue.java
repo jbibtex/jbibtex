@@ -8,4 +8,9 @@ public class DigitStringValue extends LiteralValue {
 	public DigitStringValue(String string){
 		super(string);
 	}
+
+	@Override
+	protected String format(){
+		return getString();
+	}
 }

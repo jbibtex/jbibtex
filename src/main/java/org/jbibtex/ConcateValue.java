@@ -16,6 +16,11 @@ public class ConcateValue extends Value {
 	}
 
 	@Override
+	protected String format(){
+		return getLeft().format() + " # " + getRight().format();
+	}
+
+	@Override
 	public String toString(){
 		return getLeft().toString() + getRight().toString();
 	}

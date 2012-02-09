@@ -5,18 +5,18 @@ package org.jbibtex;
 
 public class BibTeXComment extends BibTeXObject {
 
-	private LiteralValue value = null;
+	private StringValue value = null;
 
 
-	public BibTeXComment(LiteralValue value){
+	public BibTeXComment(StringValue value){
 		setValue(value);
 	}
 
-	public LiteralValue getValue(){
+	public StringValue getValue(){
 		return this.value;
 	}
 
-	private void setValue(LiteralValue value){
+	private void setValue(StringValue value){
 		this.value = value;
 	}
 }
