@@ -16,6 +16,28 @@ public class BibTeXParser {
 		this(new StringReader(""));
 	}
 
+	private void resolveCrossrefs(){
+		Map<Key, BibTeXEntry> entries = getDatabase().getEntries();
+
+		for(BibTeXEntry entry : entries.values()){
+			Map<Key, Value> fields = entry.getFields();
+
+			Value value = fields.get(BibTeXEntry.CROSSREF);
+			if((value == null) || (value instanceof CrossRefValue)){
+				continue;
+			}
+
+			Key key = new Key(value.toString());
+
+			BibTeXEntry object = getDatabase().getEntry(key);
+			if(object == null){
+				throw new ObjectResolutionException(key);
+			}
+
+			entry.addField(BibTeXEntry.CROSSREF, new CrossRefValue(value, object));
+		}
+	}
+
 	public BibTeXDatabase getDatabase(){
 		return this.database;
 	}
@@ -154,6 +176,8 @@ public BibTeXDatabase parse(Reader reader) :
 	( object = Object() { database.addObject(object); } )* <EOF>
 
 	{
+		resolveCrossrefs();
+
 		setDatabase(null);
 
 		return database;

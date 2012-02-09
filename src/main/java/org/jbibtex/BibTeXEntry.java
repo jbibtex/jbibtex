@@ -19,6 +19,29 @@ public class BibTeXEntry extends BibTeXObject {
 		setKey(key);
 	}
 
+	public BibTeXEntry getCrossRef(){
+		Value value = this.fields.get(CROSSREF);
+
+		CrossRefValue crossRefValue = (CrossRefValue)value;
+		if(crossRefValue != null){
+			return crossRefValue.getEntry();
+		}
+
+		return null;
+	}
+
+	public Value getField(Key key){
+		Value value = this.fields.get(key);
+		if(value == null){
+			BibTeXEntry entry = getCrossRef();
+			if(entry != null){
+				return entry.getField(key);
+			}
+		}
+
+		return value;
+	}
+
 	public void addField(Key key, Value value){
 		this.fields.put(key, value);
 	}
@@ -46,4 +69,6 @@ public class BibTeXEntry extends BibTeXObject {
 	public Map<Key, Value> getFields(){
 		return Collections.unmodifiableMap(this.fields);
 	}
+
+	public static final Key CROSSREF = new Key("crossref");
 }
