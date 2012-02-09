@@ -16,6 +16,12 @@ public class BibTeXParser {
 		this(new StringReader(""));
 	}
 
+	public BibTeXDatabase parse(Reader reader) throws IOException, ParseException {
+		ReInit(reader);
+
+		return Database();
+	}
+
 	private void resolveCrossReferences(){
 		Map<Key, BibTeXEntry> entries = getDatabase().getEntries();
 
@@ -29,7 +35,7 @@ public class BibTeXParser {
 
 			Key key = new Key(value.toString());
 
-			BibTeXEntry object = getDatabase().getEntry(key);
+			BibTeXEntry object = getDatabase().resolveEntry(key);
 			if(object == null){
 				throw new ObjectResolutionException(key);
 			}
@@ -160,11 +166,9 @@ TOKEN :
 	< DIGITS : ( ["0"-"9"] )+ >
 }
 
-public BibTeXDatabase parse(Reader reader) :
+private BibTeXDatabase Database() :
 {
 	BibTeXDatabase database = new BibTeXDatabase();
-
-	ReInit(reader);
 
 	BibTeXObject object = null;
 }
@@ -193,6 +197,9 @@ private BibTeXObject Object() :
 		LOOKAHEAD( <AT> <COMMENT> )
 		object = Comment()
 		|
+		LOOKAHEAD( <AT> <INCLUDE> )
+		object = Include()
+		|
 		LOOKAHEAD( <AT> <PREAMBLE> )
 		object = Preamble()
 		|
@@ -219,6 +226,36 @@ private BibTeXComment Comment() :
 
 	{
 		return new BibTeXComment(new StringValue(string, StringValue.Style.BRACED));
+	}
+}
+
+private BibTeXInclude Include():
+{
+	String string;
+}
+{
+	<AT> <INCLUDE>
+	(
+		<LBRACE> string = Literal(1, "}")
+	)
+
+	{
+		BibTeXDatabase database;
+
+		try {
+			Reader reader = new FileReader(string);
+
+			try {
+				BibTeXParser parser = new BibTeXParser();
+				database = parser.parse(reader);
+			} finally {
+				reader.close();
+			}
+		} catch(Exception e){
+			throw new ParseException(e.getMessage());
+		}
+
+		return new BibTeXInclude(new StringValue(string, StringValue.Style.BRACED), database);
 	}
 }
 
@@ -387,7 +424,7 @@ private Value SimpleValue() :
 
 			Key key = value.toKey();
 
-			BibTeXString object = getDatabase().getString(key); 
+			BibTeXString object = getDatabase().resolveString(key); 
 			if(object == null){
 				throw new ObjectResolutionException(key);
 			}

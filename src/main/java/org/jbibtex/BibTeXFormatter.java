@@ -30,6 +30,10 @@ public class BibTeXFormatter {
 				format((BibTeXEntry)object, writer);
 			} else
 
+			if(object instanceof BibTeXInclude){
+				format((BibTeXInclude)object, writer);
+			} else
+
 			if(object instanceof BibTeXPreamble){
 				format((BibTeXPreamble)object, writer);
 			} else
@@ -81,6 +85,12 @@ public class BibTeXFormatter {
 		}
 
 		writer.write('}');
+	}
+
+	protected void format(BibTeXInclude include, Writer writer) throws IOException {
+		writer.write("@Include");
+
+		format(include.getValue(), 1, writer);
 	}
 
 	protected void format(BibTeXPreamble preamble, Writer writer) throws IOException {
