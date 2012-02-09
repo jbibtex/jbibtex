@@ -267,9 +267,9 @@ private BibTeXEntry Entry() :
 {
 	<AT> type = <NAME>
 	(
-		<LPAREN> key = <NAME> <COMMA> fields = AssignmentList() ( <COMMA> )? <RPAREN>
+		<LPAREN> key = Name() <COMMA> fields = AssignmentList() ( <COMMA> )? <RPAREN>
 		|
-		<LBRACE> key = <NAME> <COMMA> fields = AssignmentList() ( <COMMA> )? <RBRACE>
+		<LBRACE> key = Name() <COMMA> fields = AssignmentList() ( <COMMA> )? <RBRACE>
 	)
 
 	{
@@ -304,10 +304,32 @@ private List<Field> AssignmentList() :
 	Field field;
 }
 {
-	field = Assignment() { fields.add(field); } ( LOOKAHEAD( <COMMA> <NAME> ) <COMMA> field = Assignment() { fields.add(field); } )*
+	field = Assignment() { fields.add(field); } ( LOOKAHEAD( <COMMA> Name() ) <COMMA> field = Assignment() { fields.add(field); } )*
 
 	{
 		return fields;
+	}
+}
+
+private Token Name() :
+{
+	Token token;
+}
+{
+	(
+		token = <COMMENT>
+		|
+		token = <INCLUDE>
+		|
+		token = <PREAMBLE>
+		|
+		token = <STRING>
+		|
+		token = <NAME>
+	)
+
+	{
+		return token;
 	}
 }
 
@@ -316,7 +338,7 @@ private Key Key() :
 	Token token;
 }
 {
-	token = <NAME>
+	token = Name()
 
 	{
 		return new Key(token.image);
@@ -359,7 +381,7 @@ private Value SimpleValue() :
 			return new StringValue(string, StringValue.Style.QUOTED);
 		}
 		|
-		token = <NAME>
+		token = Name()
 		{
 			KeyValue value = new KeyValue(token.image);
 
