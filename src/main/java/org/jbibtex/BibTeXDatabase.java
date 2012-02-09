@@ -73,7 +73,10 @@ public class BibTeXDatabase {
 		return Collections.unmodifiableMap(this.entries);
 	}
 
-	private static KeyMap<BibTeXString> macros = new KeyMap<BibTeXString>();
+	static
+	public Map<Key, BibTeXString> getMacros(){
+		return BibTeXDatabase.macros;
+	}
 
 	static
 	public void addMacro(String key, String value){
@@ -84,6 +87,13 @@ public class BibTeXDatabase {
 	public void addMacro(BibTeXString macro){
 		BibTeXDatabase.macros.put(macro.getKey(), macro);
 	}
+
+	static
+	public void removeMacro(BibTeXString macro){
+		BibTeXDatabase.macros.remove(macro.getKey());
+	}
+
+	private static KeyMap<BibTeXString> macros = new KeyMap<BibTeXString>();
 
 	static {
 		addMacro("jan", "January");
