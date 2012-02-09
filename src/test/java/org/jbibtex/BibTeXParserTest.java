@@ -14,18 +14,21 @@ public class BibTeXParserTest {
 
 	@Test
 	public void parseUnix() throws Exception {
-		BibTeXDatabase.addMacro("ack-jsq", "ack-jsq");
+		String[] macros = {"ack-hk", "ack-kl", "ack-kr", "ack-pb", "ack-rfb"};
+		for(String macro : macros){
+			BibTeXDatabase.addMacro(macro, macro);
+		}
 
 		BibTeXDatabase database = parse("/unix.bib");
 
 		List<BibTeXObject> objects = database.getObjects();
-		assertEquals(359, objects.size());
+		assertEquals(2631, objects.size());
 
 		Map<Key, BibTeXString> strings = database.getStrings();
-		assertEquals(85, strings.size());
+		assertEquals(358, strings.size());
 
 		Map<Key, BibTeXEntry> entries = database.getEntries();
-		assertEquals(274, entries.size());
+		assertEquals(2272, entries.size());
 	}
 
 	static
