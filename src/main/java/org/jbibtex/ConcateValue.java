@@ -21,8 +21,8 @@ public class ConcateValue extends Value {
 	}
 
 	@Override
-	public String toString(){
-		return getLeft().toString() + getRight().toString();
+	public String toUserString(){
+		return getLeft().toUserString() + getRight().toUserString();
 	}
 
 	public Value getLeft(){

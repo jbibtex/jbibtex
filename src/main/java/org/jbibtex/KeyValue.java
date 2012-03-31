@@ -13,7 +13,7 @@ public class KeyValue extends Value {
 	}
 
 	public Key toKey(){
-		Key key = new Key(toString());
+		Key key = new Key(getString());
 
 		return key;
 	}
@@ -24,7 +24,7 @@ public class KeyValue extends Value {
 	}
 
 	@Override
-	public String toString(){
+	public String toUserString(){
 		return getString();
 	}
 

@@ -21,14 +21,14 @@ public class ReferenceValue extends Value implements Resolvable {
 	}
 
 	@Override
-	public String toString(){
+	public String toUserString(){
 		BibTeXString string = getString();
 
 		if(string != null){
-			return (string.getValue()).toString();
+			return (string.getValue()).toUserString();
 		}
 
-		return getValue().toString();
+		return getValue().toUserString();
 	}
 
 	@Override

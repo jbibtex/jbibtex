@@ -14,7 +14,7 @@ public class LiteralValue extends Value {
 	}
 
 	@Override
-	public String toString(){
+	public String toUserString(){
 		return getString();
 	}
 

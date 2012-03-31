@@ -21,8 +21,8 @@ public class CrossReferenceValue extends Value implements Resolvable {
 	}
 
 	@Override
-	public String toString(){
-		return getValue().toString();
+	public String toUserString(){
+		return getValue().toUserString();
 	}
 
 	@Override

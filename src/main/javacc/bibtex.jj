@@ -40,7 +40,7 @@ public class BibTeXParser {
 				continue;
 			}
 
-			Key key = new Key(value.toString());
+			Key key = new Key(value.toUserString());
 
 			BibTeXEntry object = getDatabase().resolveEntry(key);
 			checkCrossReferenceResolution(key, object);
