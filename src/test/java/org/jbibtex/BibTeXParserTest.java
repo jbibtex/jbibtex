@@ -22,13 +22,13 @@ public class BibTeXParserTest {
 		BibTeXDatabase database = parse("/unix.bib");
 
 		List<BibTeXObject> objects = database.getObjects();
-		assertEquals(2631, objects.size());
+		assertEquals(2632, objects.size());
 
 		Map<Key, BibTeXString> strings = database.getStrings();
 		assertEquals(358, strings.size());
 
 		Map<Key, BibTeXEntry> entries = database.getEntries();
-		assertEquals(2272, entries.size());
+		assertEquals(2273, entries.size());
 	}
 
 	static
