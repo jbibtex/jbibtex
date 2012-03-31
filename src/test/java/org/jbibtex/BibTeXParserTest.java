@@ -12,13 +12,31 @@ import static org.junit.Assert.*;
 
 public class BibTeXParserTest {
 
-	@Test
-	public void parseUnix() throws Exception {
-		String[] macros = {"ack-hk", "ack-kl", "ack-kr", "ack-pb", "ack-rfb"};
+	@Before
+	public void initAckMacros(){
+		String[] macros = {"ack-bnb", "ack-bs", "ack-hk", "ack-kl", "ack-kr", "ack-pb", "ack-rfb"};
+
 		for(String macro : macros){
 			BibTeXParser.addMacro(macro, macro);
 		}
+	}
 
+	@Test
+	public void parseJava() throws Exception {
+		BibTeXDatabase database = parse("/java.bib");
+
+		List<BibTeXObject> objects = database.getObjects();
+		assertEquals(4498, objects.size());
+
+		Map<Key, BibTeXString> strings = database.getStrings();
+		assertEquals(467, strings.size());
+
+		Map<Key, BibTeXEntry> entries = database.getEntries();
+		assertEquals(4030, entries.size());
+	}
+
+	@Test
+	public void parseUnix() throws Exception {
 		BibTeXDatabase database = parse("/unix.bib");
 
 		List<BibTeXObject> objects = database.getObjects();
