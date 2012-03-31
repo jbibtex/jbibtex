@@ -3,7 +3,7 @@
  */
 package org.jbibtex;
 
-public class CrossReferenceValue extends Value {
+public class CrossReferenceValue extends Value implements Resolvable {
 
 	private Value value = null;
 
@@ -23,6 +23,11 @@ public class CrossReferenceValue extends Value {
 	@Override
 	public String toString(){
 		return getValue().toString();
+	}
+
+	@Override
+	public boolean isResolved(){
+		return getEntry() != null;
 	}
 
 	public Value getValue(){

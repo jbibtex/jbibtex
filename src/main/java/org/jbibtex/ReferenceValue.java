@@ -3,7 +3,7 @@
  */
 package org.jbibtex;
 
-public class ReferenceValue extends Value {
+public class ReferenceValue extends Value implements Resolvable {
 
 	private KeyValue value = null;
 
@@ -29,6 +29,11 @@ public class ReferenceValue extends Value {
 		}
 
 		return getValue().toString();
+	}
+
+	@Override
+	public boolean isResolved(){
+		return getString() != null;
 	}
 
 	public KeyValue getValue(){
