@@ -16,7 +16,7 @@ public class BibTeXParserTest {
 	public void parseUnix() throws Exception {
 		String[] macros = {"ack-hk", "ack-kl", "ack-kr", "ack-pb", "ack-rfb"};
 		for(String macro : macros){
-			BibTeXDatabase.addMacro(macro, macro);
+			BibTeXParser.addMacro(macro, macro);
 		}
 
 		BibTeXDatabase database = parse("/unix.bib");

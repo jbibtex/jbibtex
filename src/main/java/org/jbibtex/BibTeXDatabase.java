@@ -77,8 +77,6 @@ public class BibTeXDatabase {
 					return string;
 				}
 			}
-
-			return BibTeXDatabase.macros.get(key);
 		}
 
 		return string;
@@ -108,42 +106,5 @@ public class BibTeXDatabase {
 
 	public Map<Key, BibTeXEntry> getEntries(){
 		return Collections.unmodifiableMap(this.entries);
-	}
-
-	static
-	public Map<Key, BibTeXString> getMacros(){
-		return BibTeXDatabase.macros;
-	}
-
-	static
-	public void addMacro(String key, String value){
-		addMacro(new BibTeXString(new Key(key), new StringValue(value, StringValue.Style.BRACED)));
-	}
-
-	static
-	public void addMacro(BibTeXString macro){
-		BibTeXDatabase.macros.put(macro.getKey(), macro);
-	}
-
-	static
-	public void removeMacro(BibTeXString macro){
-		BibTeXDatabase.macros.remove(macro.getKey());
-	}
-
-	private static KeyMap<BibTeXString> macros = new KeyMap<BibTeXString>();
-
-	static {
-		addMacro("jan", "January");
-		addMacro("feb", "February");
-		addMacro("mar", "March");
-		addMacro("apr", "April");
-		addMacro("may", "May");
-		addMacro("jun", "June");
-		addMacro("jul", "July");
-		addMacro("aug", "August");
-		addMacro("sep", "September");
-		addMacro("oct", "October");
-		addMacro("nov", "November");
-		addMacro("dec", "December");
 	}
 }

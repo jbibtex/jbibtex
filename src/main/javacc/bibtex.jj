@@ -64,6 +64,43 @@ public class BibTeXParser {
 		this.database = database;
 	}
 
+	static
+	public KeyMap<BibTeXString> getMacros(){
+		return BibTeXParser.macros;
+	}
+
+	static
+	public void addMacro(String key, String value){
+		addMacro(new BibTeXString(new Key(key), new StringValue(value, StringValue.Style.BRACED)));
+	}
+
+	static
+	public void addMacro(BibTeXString macro){
+		BibTeXParser.macros.put(macro.getKey(), macro);
+	}
+
+	static
+	public void removeMacro(BibTeXString macro){
+		BibTeXParser.macros.remove(macro.getKey());
+	}
+
+	private static final KeyMap<BibTeXString> macros = new KeyMap<BibTeXString>();
+
+	static {
+		addMacro("jan", "January");
+		addMacro("feb", "February");
+		addMacro("mar", "March");
+		addMacro("apr", "April");
+		addMacro("may", "May");
+		addMacro("jun", "June");
+		addMacro("jul", "July");
+		addMacro("aug", "August");
+		addMacro("sep", "September");
+		addMacro("oct", "October");
+		addMacro("nov", "November");
+		addMacro("dec", "December");
+	}
+
 
 	static
 	private class Field {
@@ -259,6 +296,7 @@ private BibTeXInclude Include():
 
 			try {
 				BibTeXParser parser = new BibTeXParser();
+
 				database = parser.parse(reader);
 			} finally {
 				reader.close();
@@ -437,6 +475,10 @@ private Value SimpleValue() :
 			Key key = value.toKey();
 
 			BibTeXString object = getDatabase().resolveString(key);
+			if(object == null){
+				object = (BibTeXParser.getMacros()).get(key);
+			}
+
 			checkStringResolution(key, object);
 
 			return new ReferenceValue(value, object);
