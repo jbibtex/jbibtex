@@ -22,6 +22,12 @@ public class ReferenceValue extends Value {
 
 	@Override
 	public String toString(){
+		BibTeXString string = getString();
+
+		if(string != null){
+			return (string.getValue()).toString();
+		}
+
 		return getValue().toString();
 	}
 
