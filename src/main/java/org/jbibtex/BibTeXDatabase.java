@@ -66,6 +66,7 @@ public class BibTeXDatabase {
 
 	public BibTeXString resolveString(Key key){
 		BibTeXString string = this.strings.get(key);
+
 		if(string == null){
 
 			for(BibTeXInclude include : this.includes){
@@ -89,6 +90,7 @@ public class BibTeXDatabase {
 
 	public BibTeXEntry resolveEntry(Key key){
 		BibTeXEntry entry = this.entries.get(key);
+
 		if(entry == null){
 
 			for(BibTeXInclude include : this.includes){

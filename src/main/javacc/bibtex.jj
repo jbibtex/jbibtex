@@ -22,6 +22,13 @@ public class BibTeXParser {
 		return Database();
 	}
 
+	protected void checkStringResolution(Key key, BibTeXString string){
+
+		if(string == null){
+			throw new ObjectResolutionException(key);
+		}
+	}
+
 	private void resolveCrossReferences(){
 		Map<Key, BibTeXEntry> entries = getDatabase().getEntries();
 
@@ -36,11 +43,16 @@ public class BibTeXParser {
 			Key key = new Key(value.toString());
 
 			BibTeXEntry object = getDatabase().resolveEntry(key);
-			if(object == null){
-				throw new ObjectResolutionException(key);
-			}
+			checkCrossReferenceResolution(key, object);
 
 			entry.addField(BibTeXEntry.CROSSREF, new CrossReferenceValue(value, object));
+		}
+	}
+
+	protected void checkCrossReferenceResolution(Key key, BibTeXEntry entry){
+
+		if(entry == null){
+			throw new ObjectResolutionException(key);
 		}
 	}
 
@@ -424,10 +436,8 @@ private Value SimpleValue() :
 
 			Key key = value.toKey();
 
-			BibTeXString object = getDatabase().resolveString(key); 
-			if(object == null){
-				throw new ObjectResolutionException(key);
-			}
+			BibTeXString object = getDatabase().resolveString(key);
+			checkStringResolution(key, object);
 
 			return new ReferenceValue(value, object);
 		}
