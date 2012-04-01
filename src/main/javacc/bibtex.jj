@@ -132,7 +132,6 @@ public class BibTeXParser {
 		}
 	}
 }
-
 PARSER_END(BibTeXParser)
 
 <DEFAULT>
@@ -182,6 +181,8 @@ TOKEN :
 	|
 	< EQUALS : "=" >
 	|
+	< HASH : "#" >
+	|
 	< LBRACE : "{">
 	|
 	< LPAREN : "(" >
@@ -191,8 +192,6 @@ TOKEN :
 	< RBRACE : "}" >
 	|
 	< RPAREN : ")" > 
-	|
-	< SHARP : "#" >
 }
 
 <DEFAULT>
@@ -439,7 +438,7 @@ private Value Value() :
 	Value right = null;
 }
 {
-	left = SimpleValue() ( <SHARP> right = Value() )?
+	left = SimpleValue() ( <HASH> right = Value() )?
 
 	{
 		if(right != null){
