@@ -1,0 +1,227 @@
+/*
+ * Copyright (c) 2012 University of Tartu
+ */
+PARSER_BEGIN(LaTeXParser)
+package org.jbibtex;
+
+import java.io.*;
+import java.util.*;
+
+public class LaTeXParser {
+
+	public LaTeXParser(){
+		this(new StringReader(""));
+	}
+
+	public List<LaTeXObject> parse(Reader reader) throws IOException, ParseException {
+		ReInit(reader);
+
+		return LaTeX();
+	}
+}
+PARSER_END(LaTeXParser)
+
+<DEFAULT>
+TOKEN : 
+{
+	< BACKSLASH : "\\" >
+	|
+	< LBRACE : "{" >
+	|
+	< RBRACE : "}" >
+}
+
+<DEFAULT>
+TOKEN :
+{
+	< SPECIAL : [ "#", "$", "%", "&", "^", "_", "~" ] >
+	|
+	< NON_SPECIAL : [ "!"-"\"", "\'"-"/", ":"-"@", "[", "]", "`", "|", "\u007f" ] >
+}
+
+<DEFAULT>
+TOKEN :
+{
+	< LETTER : [ "a"-"z", "A"-"Z" ] >
+	|
+	< NUMBER : [ "0"-"9" ] >
+}
+
+<DEFAULT>
+TOKEN :
+{
+	< WHITESPACE : [ "\t", "\n", " " ] >
+}
+
+private List<LaTeXObject> LaTeX() :
+{
+	List<LaTeXObject> objects;
+}
+{
+	objects = ObjectList() <EOF>
+
+	{
+		return objects;
+	}
+}
+
+private List<LaTeXObject> ObjectList() :
+{
+	List<LaTeXObject> objects = new ArrayList<LaTeXObject>();
+
+	LaTeXObject object;
+}
+{
+	( object = Object() { objects.add(object); } )*
+
+	{
+		return objects;
+	}
+}
+
+private LaTeXObject Object() :
+{
+	LaTeXObject object;
+}
+{
+	(
+		object = Command()
+		|
+		object = Group()
+		|
+		object = String()
+	)
+
+	{
+		return object;
+	}
+}
+
+private LaTeXCommand Command() :
+{
+	String name;
+}
+{
+	<BACKSLASH>
+	(
+		name = Name() Whitespace()
+		|
+		name = SpecialCharacter()
+		|
+		name = NonSpecialCharacter()
+	)
+
+	{
+		return new LaTeXCommand(name);
+	}
+}
+
+private String Name() :
+{
+	StringBuffer sb = new StringBuffer(16);
+
+	Token token;
+}
+{
+	token = <LETTER> { sb.append(token.image); } ( LOOKAHEAD( <LETTER> ) token = <LETTER> { sb.append(token.image); } )*
+
+	{
+		return sb.toString();
+	}
+}
+
+private void Whitespace() :
+{}
+{
+	( LOOKAHEAD( WhitespaceCharacter() ) WhitespaceCharacter() )*
+}
+
+private String WhitespaceCharacter() :
+{
+	Token token;
+}
+{
+	token = <WHITESPACE>
+
+	{
+		return token.image;
+	}
+}
+
+private String SpecialCharacter() :
+{
+	Token token;
+}
+{
+	(
+		token = <BACKSLASH>
+		|
+		token = <LBRACE>
+		|
+		token = <RBRACE>
+		|
+		token = <SPECIAL>
+	)
+
+	{
+		return token.image;
+	}
+}
+
+private String NonSpecialCharacter() :
+{
+	Token token;
+}
+{
+	token = <NON_SPECIAL>
+
+	{
+		return token.image;
+	}
+}
+
+private LaTeXGroup Group() :
+{
+	List<LaTeXObject> objects;
+}
+{
+	<LBRACE> objects = ObjectList() <RBRACE>
+
+	{
+		return new LaTeXGroup(objects);
+	}
+}
+
+private LaTeXString String() :
+{
+	StringBuffer sb = new StringBuffer(64);
+
+	String string;
+}
+{
+	string = TextCharacter() { sb.append(string); } ( LOOKAHEAD( TextCharacter() ) string = TextCharacter() { sb.append(string); } )*
+
+	{
+		return new LaTeXString(sb.toString());
+	}
+}
+
+private String TextCharacter() :
+{
+	Token token;
+}
+{
+	(
+		token = <NON_SPECIAL>
+		|
+		token = <LETTER>
+		|
+		token = <NUMBER>
+		|
+		token = <WHITESPACE>
+	)
+
+	{
+		return token.image;
+	}
+}
