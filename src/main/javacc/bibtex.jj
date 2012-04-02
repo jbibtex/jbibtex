@@ -22,7 +22,16 @@ public class BibTeXParser {
 		return Database();
 	}
 
-	protected void checkStringResolution(Key key, BibTeXString string){
+	/**
+	 * Checks the <code>string</code> argument before constructing a new {@link ReferenceValue} instance.
+	 * The default behaviour is to prohibit unresolved references.
+	 *
+	 * @throws ObjectResolutionException If the <code>string</code> is <code>null</code>.
+	 *
+	 * @see BibTeXDatabase#resolveString(Key)
+	 * @see BibTeXParser#getMacros()
+	 */
+	public void checkStringResolution(Key key, BibTeXString string){
 
 		if(string == null){
 			throw new ObjectResolutionException(key);
@@ -49,7 +58,15 @@ public class BibTeXParser {
 		}
 	}
 
-	protected void checkCrossReferenceResolution(Key key, BibTeXEntry entry){
+	/**
+	 * Checks the <code>entry</code> argument before constructing a new {@link CrossReferenceValue} instance.
+	 * The default behaviour is to prohibit unresolved references.
+	 *
+	 * @throws ObjectResolutionException If the <code>entry</code> is <code>null</code>.
+	 *
+	 * @see BibTeXDatabase#resolveEntry(Key)
+	 */
+	public void checkCrossReferenceResolution(Key key, BibTeXEntry entry){
 
 		if(entry == null){
 			throw new ObjectResolutionException(key);

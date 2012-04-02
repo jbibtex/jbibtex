@@ -25,6 +25,9 @@ public class CrossReferenceValue extends Value implements Resolvable {
 		return getValue().toUserString();
 	}
 
+	/**
+	 * @see BibTeXParser#checkCrossReferenceResolution(Key, BibTeXEntry)
+	 */
 	@Override
 	public boolean isResolved(){
 		return getEntry() != null;

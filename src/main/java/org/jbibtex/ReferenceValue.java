@@ -31,6 +31,9 @@ public class ReferenceValue extends Value implements Resolvable {
 		return getValue().toUserString();
 	}
 
+	/**
+	 * @see BibTeXParser#checkStringResolution(Key, BibTeXString)
+	 */
 	@Override
 	public boolean isResolved(){
 		return getString() != null;
