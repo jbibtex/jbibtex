@@ -32,8 +32,10 @@ public class BibTeXEntry extends BibTeXObject {
 
 	public Value getField(Key key){
 		Value value = this.fields.get(key);
+
 		if(value == null){
 			BibTeXEntry entry = getCrossReference();
+
 			if(entry != null){
 				return entry.getField(key);
 			}
@@ -70,12 +72,28 @@ public class BibTeXEntry extends BibTeXObject {
 		return Collections.unmodifiableMap(this.fields);
 	}
 
+	public static final Key TYPE_ARTICLE = new Key("article");
+	public static final Key TYPE_BOOK = new Key("book");
+	public static final Key TYPE_BOOKLET = new Key("booklet");
+	public static final Key TYPE_CONFERENCE = new Key("conference");
+	public static final Key TYPE_INBOOK = new Key("inbook");
+	public static final Key TYPE_INCOLLECTION = new Key("incollection");
+	public static final Key TYPE_INPROCEEDINGS = new Key("inproceedings");
+	public static final Key TYPE_MANUAL = new Key("manual");
+	public static final Key TYPE_MASTERTHESIS = new Key("masterthesis");
+	public static final Key TYPE_MISC = new Key("misc");
+	public static final Key TYPE_PHDTHESIS = new Key("phdthesis");
+	public static final Key TYPE_PROCEEDINGS = new Key("proceedings");
+	public static final Key TYPE_TECHREPORT = new Key("techreport");
+	public static final Key TYPE_UNPUBLISHED = new Key("unpublished");
+
 	public static final Key KEY_ADDRESS = new Key("address");
 	public static final Key KEY_ANNOTE = new Key("annote");
 	public static final Key KEY_AUTHOR = new Key("author");
 	public static final Key KEY_BOOKTITLE = new Key("booktitle");
 	public static final Key KEY_CHAPTER = new Key("chapter");
 	public static final Key KEY_CROSSREF = new Key("crossref");
+	public static final Key KEY_DOI = new Key("doi");
 	public static final Key KEY_EDITION = new Key("edition");
 	public static final Key KEY_EDITOR = new Key("editor");
 	public static final Key KEY_EPRINT = new Key("eprint");
