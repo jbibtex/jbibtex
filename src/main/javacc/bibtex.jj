@@ -44,7 +44,7 @@ public class BibTeXParser {
 		for(BibTeXEntry entry : entries.values()){
 			Map<Key, Value> fields = entry.getFields();
 
-			Value value = fields.get(BibTeXEntry.CROSSREF);
+			Value value = fields.get(BibTeXEntry.KEY_CROSSREF);
 			if((value == null) || (value instanceof CrossReferenceValue)){
 				continue;
 			}
@@ -54,7 +54,7 @@ public class BibTeXParser {
 			BibTeXEntry object = getDatabase().resolveEntry(key);
 			checkCrossReferenceResolution(key, object);
 
-			entry.addField(BibTeXEntry.CROSSREF, new CrossReferenceValue(value, object));
+			entry.addField(BibTeXEntry.KEY_CROSSREF, new CrossReferenceValue(value, object));
 		}
 	}
 
