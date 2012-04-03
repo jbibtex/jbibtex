@@ -15,7 +15,7 @@ public class LaTeXGroup extends LaTeXObject {
 	}
 
 	public List<LaTeXObject> getObjects(){
-		return this.objects;
+		return Collections.unmodifiableList(this.objects);
 	}
 
 	private void setObjects(List<LaTeXObject> objects){
