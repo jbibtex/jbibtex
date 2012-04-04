@@ -12,46 +12,55 @@ public class LaTeXPrinter {
 	}
 
 	public String print(List<LaTeXObject> objects){
-		StringBuffer sb = new StringBuffer();
+		TextBuilder builder = new TextBuilder();
+
+		print(objects, builder);
+
+		return builder.buildString();
+	}
+
+	private void print(List<LaTeXObject> objects, TextBuilder builder){
 
 		for(LaTeXObject object : objects){
 
 			if(object instanceof LaTeXCommand){
-				sb.append(print((LaTeXCommand)object));
+				print((LaTeXCommand)object, builder);
 			} else
 
 			if(object instanceof LaTeXGroup){
-				sb.append(print((LaTeXGroup)object));
+				print((LaTeXGroup)object, builder);
 			} else
 
 			if(object instanceof LaTeXString){
-				sb.append(print((LaTeXString)object));
+				print((LaTeXString)object, builder);
 			} else
 
 			{
 				throw new IllegalArgumentException();
 			}
 		}
-
-		return sb.toString();
 	}
 
-	protected String print(LaTeXCommand command){
+	private void print(LaTeXCommand command, TextBuilder builder){
+		char accent = getAccent(command.getName());
+		if(accent > 0){
+			builder.setAccent(accent);
+
+			return;
+		}
+
 		String symbol = getSymbol(command.getName());
 
 		if(symbol != null){
-			return symbol;
+			builder.append(symbol);
 		}
-
-		// XXX
-		return "";
 	}
 
-	protected String print(LaTeXGroup group){
-		return print(group.getObjects());
+	private void print(LaTeXGroup group, TextBuilder builder){
+		builder.append(print(group.getObjects()));
 	}
 
-	protected String print(LaTeXString string){
+	private void print(LaTeXString string, TextBuilder builder){
 		String value = string.getValue();
 
 		if(value.contains("--")){
@@ -69,7 +78,7 @@ public class LaTeXPrinter {
 			value = value.replace("'", "\u2019");
 		}
 
-		return value;
+		builder.append(value);
 	}
 
 	static
@@ -80,6 +89,116 @@ public class LaTeXPrinter {
 	}
 
 	private static final DateFormat LATEX_TODAY = new SimpleDateFormat("MMMM dd, yyyy");
+
+	static
+	private char getAccent(String name){
+		char c = (name.length() == 1 ? name.charAt(0) : 0);
+
+		switch(c){
+			case '`':
+			case '\'':
+			case '^':
+			case '\"':
+			case 'H':
+			case '~':
+			case 'c':
+			case 'k':
+			case '=':
+			case 'b':
+			case '.':
+			case 'd':
+			case 'r':
+			case 'u':
+			case 'v':
+			case 't':
+				return c;
+			default:
+				break;
+		}
+
+		return 0;
+	}
+
+	static
+	private char applyAccent(char accent, char c){
+
+		switch(accent){
+			case '`':
+				switch(c){
+					case 'A':
+						return '\u00c0';
+					case 'E':
+						return '\u00c8';
+					case 'a':
+						return '\u00e0';
+					case 'e':
+						return '\u00e8';
+					default:
+						break;
+				}
+				break;
+			case '\'':
+				switch(c){
+					case 'A':
+						return '\u00c1';
+					case 'E':
+						return '\u00c9';
+					case 'a':
+						return '\u00e1';
+					case 'e':
+						return '\u00e9';
+					default:
+						break;
+				}
+				break;
+			case '\"':
+				switch(c){
+					case 'A':
+						return '\u00c4';
+					case 'O':
+						return '\u00d6';
+					case 'U':
+						return '\u00dc';
+					case 'a':
+						return '\u00e4';
+					case 'o':
+						return '\u00f6';
+					case 'u':
+						return '\u00fc';
+					default:
+						break;
+				}
+				break;
+			case '~':
+				switch(c){
+					case 'O':
+						return '\u00d5';
+					case 'o':
+						return '\u00f5';
+					default:
+						break;
+				}
+				break;
+			case 'v':
+				switch(c){
+					case 'S':
+						return '\u0160';
+					case 'Z':
+						return '\u017d';
+					case 's':
+						return '\u0161';
+					case 'z':
+						return '\u017e';
+					default:
+						break;
+				}
+				break;
+			default:
+				break;
+		}
+
+		return c;
+	}
 
 	static
 	public String getSymbol(String name){
@@ -105,6 +224,16 @@ public class LaTeXPrinter {
 		setSymbol("{", "{");
 		setSymbol("}", "}");
 		setSymbol("~", "~");
+
+		// Non-ASCII letters
+		setSymbol("AA", "\u00c5");
+		setSymbol("AE", "\u00c6");
+		setSymbol("O", "\u00d8");
+		setSymbol("SS", "SS");
+		setSymbol("aa", "\u00e5");
+		setSymbol("ae", "\u00e6");
+		setSymbol("o", "\u00f8");
+		setSymbol("ss", "\u00df");
 
 		// Text-mode commands
 		setSymbol("textasciicircum", "^");
@@ -166,5 +295,41 @@ public class LaTeXPrinter {
 		setSymbol("TeX", "TeX");
 		setSymbol("LaTeX", "LaTeX");
 		setSymbol("LaTeXe", "LaTeX\u03b5");
+	}
+
+	static
+	private class TextBuilder {
+
+		private StringBuffer sb = new StringBuffer();
+
+		private char accent = 0;
+
+
+		public void append(String string){
+			char accent = getAccent();
+
+			if(accent > 0){
+
+				if(string.length() > 0){
+					string = applyAccent(accent, string.charAt(0)) + string.substring(1);
+				}
+
+				setAccent((char)0);
+			}
+
+			this.sb.append(string);
+		}
+
+		public char getAccent(){
+			return this.accent;
+		}
+
+		private void setAccent(char accent){
+			this.accent = accent;
+		}
+
+		public String buildString(){
+			return this.sb.toString();
+		}
 	}
 }

@@ -38,6 +38,15 @@ public class LaTeXPrinterTest {
 	}
 
 	@Test
+	public void printAccent() throws Exception {
+		String string = "H\u00e4id p\u00fchi!";
+
+		assertEquals(string, print("H\\\"aid p\\\"uhi!"));
+		assertEquals(string, print("H{\\\"a}id p{\\\"u}hi!"));
+		assertEquals(string, print("H\\\"{a}id p\\\"{u}hi!"));
+	}
+
+	@Test
 	public void printToday() throws Exception {
 		assertEquals(LaTeXPrinter.today(), print("\\today"));
 	}
