@@ -31,6 +31,13 @@ public class LaTeXPrinterTest {
 	}
 
 	@Test
+	public void printGreek() throws Exception {
+		assertEquals("\u03b1", print("\\alpha"));
+		assertEquals("\u03b2", print("\\beta"));
+		assertEquals("\u03b3", print("\\gamma"));
+	}
+
+	@Test
 	public void printToday() throws Exception {
 		assertEquals(LaTeXPrinter.today(), print("\\today"));
 	}

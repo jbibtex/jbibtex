@@ -135,10 +135,36 @@ public class LaTeXPrinter {
 		setSymbol("emdash", "\u2014");
 		setSymbol("ldots", "\u2026");
 
+		// Greek alphabet
+		setSymbol("alpha", "\u03b1");
+		setSymbol("beta", "\u03b2");
+		setSymbol("gamma", "\u03b3");
+		setSymbol("delta", "\u03b4");
+		setSymbol("epsilon", "\u03b5");
+		setSymbol("zeta", "\u03b6");
+		setSymbol("eta", "\u03b7");
+		setSymbol("theta", "\u03b8");
+		setSymbol("iota", "\u03b9");
+		setSymbol("kappa", "\u03ba");
+		setSymbol("lambda", "\u03bb");
+		setSymbol("mu", "\u03bc");
+		setSymbol("nu", "\u03bd");
+		setSymbol("xi", "\u03be");
+		setSymbol("omicron", "\u03bf"); // XXX
+		setSymbol("pi", "\u03c0");
+		setSymbol("rho", "\u03c1");
+		setSymbol("sigma", "\u03c2");
+		setSymbol("tau", "\u03c3");
+		setSymbol("upsilon", "\u03c4");
+		setSymbol("phi", "\u03c5");
+		setSymbol("chi", "\u03c6");
+		setSymbol("psi", "\u03c7");
+		setSymbol("omega", "\u03c8");
+
 		// Ready-made strings
 		setSymbol("today", today());
 		setSymbol("TeX", "TeX");
 		setSymbol("LaTeX", "LaTeX");
-		setSymbol("LaTeXe", "LaTeXe");
+		setSymbol("LaTeXe", "LaTeX\u03b5");
 	}
 }
