@@ -16,7 +16,7 @@ public class ReferenceFormatter {
 		setStyle(style);
 	}
 
-	public String format(BibTeXEntry entry){
+	public String format(BibTeXEntry entry, boolean html){
 		StringBuffer sb = new StringBuffer();
 
 		ReferenceStyle style = getStyle();
@@ -41,7 +41,7 @@ public class ReferenceFormatter {
 				sb.append(" ");
 			}
 
-			String string = field.format(value);
+			String string = field.format(value, html);
 			sb.append(string);
 
 			ensureSuffix(sb, field.getSeparator());

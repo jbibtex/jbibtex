@@ -20,7 +20,7 @@ public class FieldFormat {
 		setSeparator(separator);
 	}
 
-	public String format(Value value){
+	public String format(Value value, boolean html){
 		String string = value.toUserString();
 
 		try {
