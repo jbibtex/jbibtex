@@ -25,7 +25,8 @@ public class ACSReferenceStyle extends ReferenceStyle {
 			new FieldFormat(BibTeXEntry.KEY_YEAR, ","),
 			new VolumeFormat(","),
 			new FieldFormat(BibTeXEntry.KEY_NUMBER, ","),
-			new FieldFormat(BibTeXEntry.KEY_PAGES, ".")
+			new FieldFormat(BibTeXEntry.KEY_PAGES, "."),
+			new DOIFormat(null)
 		);
 
 		return new EntryFormat(fields);
@@ -39,7 +40,8 @@ public class ACSReferenceStyle extends ReferenceStyle {
 			new EditorFormat(";"),
 			new FieldFormat(BibTeXEntry.KEY_PUBLISHER, ":"),
 			new FieldFormat(BibTeXEntry.KEY_ADDRESS, ";"),
-			new FieldFormat(BibTeXEntry.KEY_YEAR, ".")
+			new FieldFormat(BibTeXEntry.KEY_YEAR, "."),
+			new DOIFormat(null)
 		);
 
 		return new EntryFormat(fields);
@@ -53,7 +55,8 @@ public class ACSReferenceStyle extends ReferenceStyle {
 			new InBookTitleFormat(";"),
 			new EditorFormat(";"),
 			new FieldFormat(BibTeXEntry.KEY_PUBLISHER, ";"),
-			new FieldFormat(BibTeXEntry.KEY_YEAR, ".")
+			new FieldFormat(BibTeXEntry.KEY_YEAR, "."),
+			new DOIFormat(null)
 		);
 
 		return new EntryFormat(fields);
@@ -67,7 +70,8 @@ public class ACSReferenceStyle extends ReferenceStyle {
 			new InBookTitleFormat(";"),
 			new EditorFormat(";"),
 			new FieldFormat(BibTeXEntry.KEY_ORGANIZATION, ";"),
-			new FieldFormat(BibTeXEntry.KEY_YEAR, ".")
+			new FieldFormat(BibTeXEntry.KEY_YEAR, "."),
+			new DOIFormat(null)
 		);
 
 		return new EntryFormat(fields);
@@ -122,6 +126,29 @@ public class ACSReferenceStyle extends ReferenceStyle {
 			String string = super.format(value, html);
 
 			return italic(string, html);
+		}
+	}
+
+	static
+	private class DOIFormat extends FieldFormat {
+
+		public DOIFormat(String separator){
+			super(BibTeXEntry.KEY_DOI, separator);
+		}
+
+		@Override
+		public String format(Value value, boolean html){
+			String string = super.format(value, html);
+
+			if(html){
+				string = ("DOI: <a href=\"http://dx.doi.org/" + string + "\">" + string + "</a>");
+			} else
+
+			{
+				string = ("DOI: " + string);
+			}
+
+			return string;
 		}
 	}
 
