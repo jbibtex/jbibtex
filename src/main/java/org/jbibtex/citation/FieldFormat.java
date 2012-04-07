@@ -29,6 +29,10 @@ public class FieldFormat {
 			throw new IllegalArgumentException(string, e);
 		}
 
+		if(html){
+			string = escapeXml(string);
+		}
+
 		return string;
 	}
 
@@ -66,5 +70,34 @@ public class FieldFormat {
 		LaTeXPrinter printer = new LaTeXPrinter();
 
 		return printer.print(objects);
+	}
+
+	static
+	private String escapeXml(String string){
+		StringBuffer sb = new StringBuffer(string.length() * 2);
+
+		for(int i = 0; i < string.length(); i++){
+			char c = string.charAt(i);
+
+			switch(c){
+				case '\"':
+					sb.append("&quot;");
+					break;
+				case '&':
+					sb.append("&amp;");
+					break;
+				case '<':
+					sb.append("&lt;");
+					break;
+				case '>':
+					sb.append("&gt;");
+					break;
+				default:
+					sb.append(c);
+					break;
+			}
+		}
+
+		return sb.toString();
 	}
 }
