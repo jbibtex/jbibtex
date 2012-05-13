@@ -48,6 +48,10 @@ public class BibTeXEntry extends BibTeXObject {
 		this.fields.put(key, value);
 	}
 
+	public void addAllFields(Map<Key, Value> fields){
+		this.fields.putAll(fields);
+	}
+
 	public void removeField(Key key){
 		this.fields.remove(key);
 	}
