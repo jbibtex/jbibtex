@@ -14,6 +14,7 @@ public class ACSReferenceStyle extends ReferenceStyle {
 		addFormat(BibTeXEntry.TYPE_BOOK, createBookFormat());
 		addFormat(BibTeXEntry.TYPE_INCOLLECTION, createInCollectionFormat());
 		addFormat(BibTeXEntry.TYPE_INPROCEEDINGS, createInProceedingsFormat());
+		addFormat(BibTeXEntry.TYPE_UNPUBLISHED, createUnpublishedFormat());
 	}
 
 	static
@@ -72,6 +73,16 @@ public class ACSReferenceStyle extends ReferenceStyle {
 			new FieldFormat(BibTeXEntry.KEY_ORGANIZATION, ";"),
 			new FieldFormat(BibTeXEntry.KEY_YEAR, "."),
 			new DOIFormat(null)
+		);
+
+		return new EntryFormat(fields);
+	}
+
+	static
+	private EntryFormat createUnpublishedFormat(){
+		List<FieldFormat> fields = Arrays.asList(
+			new AuthorFormat(null),
+			new FieldFormat(BibTeXEntry.KEY_TITLE, ".")
 		);
 
 		return new EntryFormat(fields);
