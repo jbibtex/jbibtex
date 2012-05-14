@@ -105,8 +105,8 @@ public class ACSReferenceStyle extends ReferenceStyle {
 		}
 
 		@Override
-		public String format(Value value, boolean html){
-			String string = super.format(value, html);
+		public String format(Value value, boolean latex, boolean html){
+			String string = super.format(value, latex, html);
 
 			string = string.replace(" and ", "; ");
 
@@ -122,8 +122,8 @@ public class ACSReferenceStyle extends ReferenceStyle {
 		}
 
 		@Override
-		public String format(Value value, boolean html){
-			String string = super.format(value, html);
+		public String format(Value value, boolean latex, boolean html){
+			String string = super.format(value, latex, html);
 
 			return italic(string, html);
 		}
@@ -137,8 +137,8 @@ public class ACSReferenceStyle extends ReferenceStyle {
 		}
 
 		@Override
-		public String format(Value value, boolean html){
-			String string = super.format(value, html);
+		public String format(Value value, boolean latex, boolean html){
+			String string = super.format(value, latex, html);
 
 			if(html){
 				string = ("DOI: <a href=\"http://dx.doi.org/" + string + "\">" + string + "</a>");
@@ -160,8 +160,8 @@ public class ACSReferenceStyle extends ReferenceStyle {
 		}
 
 		@Override
-		public String format(Value value, boolean html){
-			String string = super.format(value, html);
+		public String format(Value value, boolean latex, boolean html){
+			String string = super.format(value, latex, html);
 
 			string = string.replace(" and ", "; ");
 
@@ -181,8 +181,8 @@ public class ACSReferenceStyle extends ReferenceStyle {
 		}
 
 		@Override
-		public String format(Value value, boolean html){
-			String string = super.format(value, html);
+		public String format(Value value, boolean latex, boolean html){
+			String string = super.format(value, latex, html);
 
 			string = ("In " + string);
 
@@ -198,8 +198,8 @@ public class ACSReferenceStyle extends ReferenceStyle {
 		}
 
 		@Override
-		public String format(Value value, boolean html){
-			String string = super.format(value, html);
+		public String format(Value value, boolean latex, boolean html){
+			String string = super.format(value, latex, html);
 
 			return italic(string, html);
 		}
@@ -213,8 +213,8 @@ public class ACSReferenceStyle extends ReferenceStyle {
 		}
 
 		@Override
-		public String format(Value value, boolean html){
-			String string = super.format(value, html);
+		public String format(Value value, boolean latex, boolean html){
+			String string = super.format(value, latex, html);
 
 			return bold(string, html);
 		}

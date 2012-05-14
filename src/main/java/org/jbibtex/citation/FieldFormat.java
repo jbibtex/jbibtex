@@ -20,14 +20,17 @@ public class FieldFormat {
 		setSeparator(separator);
 	}
 
-	public String format(Value value, boolean html){
+	public String format(Value value, boolean latex, boolean html){
 		String string = value.toUserString();
 
-		try {
-			string = printLaTeX(parseLaTeX(string));
-		} catch(Exception e){
-			throw new IllegalArgumentException(string, e);
-		}
+		if(latex){
+
+			try {
+				string = printLaTeX(parseLaTeX(string));
+			} catch(Exception e){
+				throw new IllegalArgumentException(string, e);
+			}
+		} // End if
 
 		if(html){
 			string = StringUtil.escapeXml(string);

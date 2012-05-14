@@ -17,6 +17,16 @@ public class ReferenceFormatter {
 	}
 
 	public String format(BibTeXEntry entry, boolean html){
+		return format(entry, true, html);
+	}
+
+	/**
+	 * @param entry
+	 * @param latex Indicates if the <code>entry</code>'s field values should be regarded as LaTeX strings.
+	 *   Should be <code>true</code> when the entry was obtained via parsing a BibTeX file, should be <code>false</code> when the entry was constructed manually.
+	 * @param html
+	 */
+	public String format(BibTeXEntry entry, boolean latex, boolean html){
 		StringBuffer sb = new StringBuffer();
 
 		ReferenceStyle style = getStyle();
@@ -41,7 +51,7 @@ public class ReferenceFormatter {
 				sb.append(" ");
 			}
 
-			String string = field.format(value, html);
+			String string = field.format(value, latex, html);
 			sb.append(string);
 
 			ensureSuffix(sb, field.getSeparator());
