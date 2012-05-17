@@ -370,9 +370,9 @@ private BibTeXEntry Entry() :
 {
 	<AT> type = <NAME>
 	(
-		<LPAREN> key = Name() <COMMA> fields = AssignmentList() ( <COMMA> )? <RPAREN>
+		<LPAREN> key = Identifier() <COMMA> fields = AssignmentList() ( <COMMA> )? <RPAREN>
 		|
-		<LBRACE> key = Name() <COMMA> fields = AssignmentList() ( <COMMA> )? <RBRACE>
+		<LBRACE> key = Identifier() <COMMA> fields = AssignmentList() ( <COMMA> )? <RBRACE>
 	)
 
 	{
@@ -411,6 +411,22 @@ private List<Field> AssignmentList() :
 
 	{
 		return fields;
+	}
+}
+
+private Token Identifier() :
+{
+	Token token;
+}
+{
+	(
+		token = <DIGITS>
+		|
+		token = Name()
+	)
+
+	{
+		return token;
 	}
 }
 
