@@ -5,6 +5,11 @@
 	<groupId>org.jbibtex</groupId>
 	<artifactId>jbibtex</artifactId>
 	<version>1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>JBibTeX</name>
+	<description>Java BibTeX parser and formatter</description>
+	<url>http://www.jbibtex.org</url>
 
 	<organization>
 		<name>University of Tartu</name>
@@ -34,13 +39,6 @@
 		<system>Google Code</system>
 		<url>http://code.google.com/p/java-bibtex/issues/list</url>
 	</issueManagement>
-	<distributionManagement>
-		<repository>
-			<id>java-bibtex.googlecode.com</id>
-			<uniqueVersion>true</uniqueVersion>
-			<url>svn:https://java-bibtex.googlecode.com/svn/maven</url>
-		</repository>
-	</distributionManagement>
 
 	<dependencies>
 		<dependency>
