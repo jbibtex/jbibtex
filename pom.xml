@@ -11,6 +11,12 @@
 	<description>Java BibTeX parser and formatter</description>
 	<url>http://www.jbibtex.org</url>
 
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
 	<organization>
 		<name>University of Tartu</name>
 		<url>http://www.ut.ee/en</url>
