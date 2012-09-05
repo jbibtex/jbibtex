@@ -18,6 +18,11 @@ public class Key {
 	}
 
 	@Override
+	public String toString(){
+		return getValue();
+	}
+
+	@Override
 	public int hashCode(){
 		return (this.getNormalizedValue()).hashCode();
 	}
