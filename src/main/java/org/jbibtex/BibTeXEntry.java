@@ -84,7 +84,7 @@ public class BibTeXEntry extends BibTeXObject {
 	public static final Key TYPE_INCOLLECTION = new Key("incollection");
 	public static final Key TYPE_INPROCEEDINGS = new Key("inproceedings");
 	public static final Key TYPE_MANUAL = new Key("manual");
-	public static final Key TYPE_MASTERTHESIS = new Key("masterthesis");
+	public static final Key TYPE_MASTERSTHESIS = new Key("mastersthesis");
 	public static final Key TYPE_MISC = new Key("misc");
 	public static final Key TYPE_PHDTHESIS = new Key("phdthesis");
 	public static final Key TYPE_PROCEEDINGS = new Key("proceedings");
