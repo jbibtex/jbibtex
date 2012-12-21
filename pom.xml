@@ -10,7 +10,7 @@
 
 	<groupId>org.jbibtex</groupId>
 	<artifactId>jbibtex</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.2</version>
 	<packaging>jar</packaging>
 
 	<name>JBibTeX</name>
@@ -37,9 +37,9 @@
 	</developers>
 
 	<scm>
-		<connection>scm:svn:http://java-bibtex.googlecode.com/svn/branches/1.0</connection>
-		<developerConnection>scm:svn:https://java-bibtex.googlecode.com/svn/branches/1.0</developerConnection>
-		<url>http://code.google.com/p/java-bibtex/source/browse/</url>
+		<connection>scm:svn:http://java-bibtex.googlecode.com/svn/tags/1.0.2</connection>
+		<developerConnection>scm:svn:https://java-bibtex.googlecode.com/svn/tags/1.0.2</developerConnection>
+		<url>http://code.google.com/p/java-bibtex/source/browse/tags/1.0.2</url>
 	</scm>
 	<issueManagement>
 		<system>Google Code</system>
