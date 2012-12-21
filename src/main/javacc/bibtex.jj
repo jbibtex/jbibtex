@@ -11,6 +11,8 @@ public class BibTeXParser {
 
 	private BibTeXDatabase database = null;
 
+	private long id = 1L;
+
 
 	public BibTeXParser(){
 		this(new StringReader(""));
@@ -71,6 +73,16 @@ public class BibTeXParser {
 		if(entry == null){
 			throw new ObjectResolutionException(key);
 		}
+	}
+
+	/**
+	 * Generates a key value for an anonymous BibTeX bibliography database entry.
+	 *
+	 * @see BibTeXEntry#getKey
+	 * @see BibTeXDatabase#resolveEntry(Key)
+	 */
+	public String nextKey(){
+		return String.valueOf("jbibtex-" + this.id++);
 	}
 
 	public BibTeXDatabase getDatabase(){
@@ -363,20 +375,34 @@ private BibTeXEntry Entry() :
 {
 	Token type;
 
-	Token key;
+	Token key = null;
 
 	List<Field> fields;
 }
 {
 	<AT> type = <NAME>
 	(
-		<LPAREN> key = Identifier() <COMMA> fields = AssignmentList() ( <COMMA> )? <RPAREN>
+		<LPAREN> 
+		(
+			LOOKAHEAD( Identifier() <COMMA> )
+			key = Identifier() <COMMA> fields = AssignmentList()
+			|
+			fields = AssignmentList()
+		)
+		( <COMMA> )? <RPAREN>
 		|
-		<LBRACE> key = Identifier() <COMMA> fields = AssignmentList() ( <COMMA> )? <RBRACE>
+		<LBRACE> 
+		(
+			LOOKAHEAD( Identifier() <COMMA> )
+			key = Identifier() <COMMA> fields = AssignmentList()
+			|
+			fields = AssignmentList()
+		)
+		( <COMMA> )? <RBRACE>
 	)
 
 	{
-		BibTeXEntry entry = new BibTeXEntry(new Key(type.image), new Key(key.image));
+		BibTeXEntry entry = new BibTeXEntry(new Key(type.image), key != null ? new Key(key.image) : new Key(nextKey()));
 
 		for(Field field : fields){
 			entry.addField(field.getKey(), field.getValue());
