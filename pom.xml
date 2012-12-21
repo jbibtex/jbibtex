@@ -37,8 +37,8 @@
 	</developers>
 
 	<scm>
-		<connection>scm:svn:http://java-bibtex.googlecode.com/svn/trunk/</connection>
-		<developerConnection>scm:svn:https://java-bibtex.googlecode.com/svn/trunk/</developerConnection>
+		<connection>scm:svn:http://java-bibtex.googlecode.com/svn/branches/1.0</connection>
+		<developerConnection>scm:svn:https://java-bibtex.googlecode.com/svn/branches/1.0</developerConnection>
 		<url>http://code.google.com/p/java-bibtex/source/browse/</url>
 	</scm>
 	<issueManagement>
