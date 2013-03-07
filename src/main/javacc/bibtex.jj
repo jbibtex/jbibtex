@@ -238,9 +238,24 @@ TOKEN :
 <DEFAULT>
 TOKEN :
 {
-	< NAME : ( ["a"-"z", "A"-"Z"] ( ["a"-"z", "A"-"Z", "0"-"9", "'", "+", "-", ".", "/", ":", "_"] )* ) >
+	< NAME : ( <ASCII_LETTER> | <UNICODE_LETTER> ) ( <ASCII_LETTER> | <ASCII_DIGIT> | <UNICODE_LETTER> | <NAME_SPACING> )* >
 	|
-	< DIGITS : ( ["0"-"9"] )+ >
+	< DIGITS : ( <ASCII_DIGIT> )+ >
+	|
+	< #ASCII_LETTER : ["a"-"z", "A"-"Z"] >
+	|
+	< #ASCII_DIGIT : ["0"-"9"] >
+	|
+	< #UNICODE_LETTER : 
+		[
+			"\u00c0"-"\u00d6",
+			"\u00d8"-"\u00f6",
+			"\u00f8"-"\u00ff",
+			"\u0100"-"\u1fff"
+		]
+	>
+	|
+	< #NAME_SPACING : ["'", "+", "-", ".", "/", ":", "_"] >
 }
 
 private BibTeXDatabase Database() :
