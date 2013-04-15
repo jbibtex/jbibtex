@@ -574,15 +574,19 @@ private String Literal(int braceLevel, String delimiter){
 
 	token_source.SwitchTo(IN_LITERAL);
 
-	for(Token token = getNextToken(); true; token = getNextToken()){
+	for(Token prevToken = null, token = getNextToken(); true; prevToken = token, token = getNextToken()){
+		boolean escaped = (prevToken != null && "\\".equals(prevToken.image));
 
-		if("{".equals(token.image)){
-			braceLevel++;
-		} else
+		if(!escaped){
 
-		if("}".equals(token.image)){
-			braceLevel--;
-		} // End if
+			if("{".equals(token.image)){
+				braceLevel++;
+			} else
+
+			if("}".equals(token.image)){
+				braceLevel--;
+			}
+		}// End if
 
 		if(delimiter.equals(token.image) && braceLevel == 0){
 			break;
