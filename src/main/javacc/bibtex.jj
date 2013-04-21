@@ -113,6 +113,21 @@ public class BibTeXParser {
 		BibTeXParser.macros.remove(macro.getKey());
 	}
 
+	static
+	private boolean isDigitString(String string){
+
+		for(int i = 0; i < string.length(); i++){
+			char c = string.charAt(i);
+
+			// Only ASCII digits from '0' to '9'
+			if(c < '0' || c > '9'){
+				return false;
+			}
+		}
+		
+		return (string.length() > 0);
+	}
+
 	private static final KeyMap<BibTeXString> macros = new KeyMap<BibTeXString>();
 
 	static {
@@ -238,9 +253,7 @@ TOKEN :
 <DEFAULT>
 TOKEN :
 {
-	< NAME : ( <ASCII_LETTER> | <UNICODE_LETTER> ) ( <ASCII_LETTER> | <ASCII_DIGIT> | <UNICODE_LETTER> | <NAME_SPACING> )* >
-	|
-	< DIGITS : ( <ASCII_DIGIT> )+ >
+	< NAME : ( <ASCII_LETTER> | <ASCII_DIGIT> | <UNICODE_LETTER> ) ( <ASCII_LETTER> | <ASCII_DIGIT> | <UNICODE_LETTER> | <NAME_SPACING> )* >
 	|
 	< #ASCII_LETTER : ["a"-"z", "A"-"Z"] >
 	|
@@ -461,8 +474,6 @@ private Token Identifier() :
 }
 {
 	(
-		token = <DIGITS>
-		|
 		token = Name()
 	)
 
@@ -543,23 +554,26 @@ private Value SimpleValue() :
 		|
 		token = Name()
 		{
-			KeyValue value = new KeyValue(token.image);
+			boolean digits = isDigitString(token.image);
 
-			Key key = value.toKey();
+			if(!digits){
+				KeyValue value = new KeyValue(token.image);
 
-			BibTeXString object = getDatabase().resolveString(key);
-			if(object == null){
-				object = (BibTeXParser.getMacros()).get(key);
+				Key key = value.toKey();
+
+				BibTeXString object = getDatabase().resolveString(key);
+				if(object == null){
+					object = (BibTeXParser.getMacros()).get(key);
+				}
+
+				checkStringResolution(key, object);
+
+				return new ReferenceValue(value, object);
+			} else
+
+			{
+				return new DigitStringValue(token.image);
 			}
-
-			checkStringResolution(key, object);
-
-			return new ReferenceValue(value, object);
-		}
-		|
-		token = <DIGITS>
-		{
-			return new DigitStringValue(token.image);
 		}
 	)
 }
