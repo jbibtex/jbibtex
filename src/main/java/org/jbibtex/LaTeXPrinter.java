@@ -50,7 +50,6 @@ public class LaTeXPrinter {
 		}
 
 		String symbol = getSymbol(command.getName());
-
 		if(symbol != null){
 			builder.append(symbol);
 		}
@@ -129,10 +128,22 @@ public class LaTeXPrinter {
 						return '\u00c0';
 					case 'E':
 						return '\u00c8';
+					case 'I':
+						return '\u00cc';
+					case 'O':
+						return '\u00d2';
+					case 'U':
+						return '\u00d9';
 					case 'a':
 						return '\u00e0';
 					case 'e':
 						return '\u00e8';
+					case 'i':
+						return '\u00ec';
+					case 'o':
+						return '\u00f2';
+					case 'u':
+						return '\u00f9';
 					default:
 						break;
 				}
@@ -143,10 +154,22 @@ public class LaTeXPrinter {
 						return '\u00c1';
 					case 'E':
 						return '\u00c9';
+					case 'I':
+						return '\u00cd';
+					case 'O':
+						return '\u00d3';
+					case 'U':
+						return '\u00da';
 					case 'a':
 						return '\u00e1';
 					case 'e':
 						return '\u00e9';
+					case 'i':
+						return '\u00ed';
+					case 'o':
+						return '\u00f3';
+					case 'u':
+						return '\u00fa';
 					default:
 						break;
 				}
@@ -155,12 +178,20 @@ public class LaTeXPrinter {
 				switch(c){
 					case 'A':
 						return '\u00c4';
+					case 'E':
+						return '\u00cb';
+					case 'I':
+						return '\u00cf';
 					case 'O':
 						return '\u00d6';
 					case 'U':
 						return '\u00dc';
 					case 'a':
 						return '\u00e4';
+					case 'e':
+						return '\u00eb';
+					case 'i':
+						return '\u00ef';
 					case 'o':
 						return '\u00f6';
 					case 'u':
@@ -171,8 +202,16 @@ public class LaTeXPrinter {
 				break;
 			case '~':
 				switch(c){
+					case 'A':
+						return '\u00c3';
+					case 'N':
+						return '\u00d1';
 					case 'O':
 						return '\u00d5';
+					case 'a':
+						return '\u00e3';
+					case 'n':
+						return '\u00f1';
 					case 'o':
 						return '\u00f5';
 					default:
@@ -181,10 +220,14 @@ public class LaTeXPrinter {
 				break;
 			case 'v':
 				switch(c){
+					case 'C':
+						return '\u010c';
 					case 'S':
 						return '\u0160';
 					case 'Z':
 						return '\u017d';
+					case 'c':
+						return '\u010d';
 					case 's':
 						return '\u0161';
 					case 'z':
