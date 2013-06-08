@@ -579,7 +579,7 @@ private Value SimpleValue() :
 }
 
 JAVACODE
-private String Literal(int braceLevel, String delimiter){
+private String Literal(int braceLevel, String delimiter) throws ParseException {
 	StringBuffer sb = new StringBuffer(64);
 
 	if(braceLevel < 0){
@@ -589,6 +589,11 @@ private String Literal(int braceLevel, String delimiter){
 	token_source.SwitchTo(IN_LITERAL);
 
 	for(Token prevToken = null, token = getNextToken(); true; prevToken = token, token = getNextToken()){
+
+		if(token.kind == BibTeXParserConstants.EOF){
+			throw new ParseException();
+		}
+
 		boolean escaped = (prevToken != null && "\\".equals(prevToken.image));
 
 		if(!escaped){
