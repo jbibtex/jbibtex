@@ -282,7 +282,11 @@ private BibTeXDatabase Database() :
 		setDatabase(database);
 	}
 
-	( object = Object() { database.addObject(object); } )* <EOF>
+	(
+		<COMMA>
+		|
+		object = Object() { database.addObject(object); } 
+	)* <EOF>
 
 	{
 		resolveCrossReferences();
