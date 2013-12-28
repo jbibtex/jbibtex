@@ -49,6 +49,11 @@ public class BibTeXParserTest {
 	}
 
 	@Test
+	public void parseMendeley() throws Exception {
+		parse("/mendeley.bib");
+	}
+
+	@Test
 	public void parseUnix() throws Exception {
 		BibTeXDatabase database = parse("/unix.bib");
 
@@ -74,6 +79,11 @@ public class BibTeXParserTest {
 		assertEquals(34, countType(values, BibTeXEntry.TYPE_PROCEEDINGS));
 		assertEquals(33, countType(values, BibTeXEntry.TYPE_TECHREPORT));
 		assertEquals(2, countType(values, BibTeXEntry.TYPE_UNPUBLISHED));
+	}
+
+	@Test
+	public void parseZotero() throws Exception {
+		parse("/zotero.bib");
 	}
 
 	static
