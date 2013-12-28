@@ -268,7 +268,7 @@ TOKEN :
 		]
 	>
 	|
-	< #NAME_SPACING : ["'", "+", "-", ".", "/", ":", "_"] >
+	< #NAME_SPACING : ["'", "+", "-", ".", "/", ":", "_", "?"] >
 }
 
 private BibTeXDatabase Database() :
