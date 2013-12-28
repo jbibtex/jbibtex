@@ -37,13 +37,14 @@
 	</developers>
 
 	<scm>
-		<connection>scm:svn:http://java-bibtex.googlecode.com/svn/branches/1.0</connection>
-		<developerConnection>scm:svn:https://java-bibtex.googlecode.com/svn/branches/1.0</developerConnection>
-		<url>http://code.google.com/p/java-bibtex/source/browse/</url>
+		<connection>scm:git:git@github.com:jbibtex/jbibtex.git</connection>
+		<developerConnection>scm:git:git@github.com:jbibtex/jbibtex.git</developerConnection>
+		<url>git://github.com/jbibtex/jbibtex.git</url>
+		<tag>HEAD</tag>
 	</scm>
 	<issueManagement>
-		<system>Google Code</system>
-		<url>http://code.google.com/p/java-bibtex/issues/list</url>
+		<system>GitHub</system>
+		<url>https://github.com/jbibtex/jbibtex/issues</url>
 	</issueManagement>
 
 	<dependencies>
@@ -77,6 +78,14 @@
 				<configuration>
 					<source>1.5</source>
 					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.4.1</version>
+				<configuration>
+					<localCheckout>true</localCheckout>
+					<pushChanges>false</pushChanges>
 				</configuration>
 			</plugin>
 			<plugin>
