@@ -21,6 +21,8 @@ public class BibTeXParser {
 	public BibTeXDatabase parse(Reader reader) throws IOException, ParseException {
 		ReInit(reader);
 
+		token_source.SwitchTo(IN_HEADER);
+
 		return Database();
 	}
 
@@ -177,6 +179,12 @@ public class BibTeXParser {
 	}
 }
 PARSER_END(BibTeXParser)
+
+<IN_HEADER>
+SKIP :
+{
+	< ( ~["%", "@"] )* > : DEFAULT
+}
 
 <DEFAULT>
 MORE :
