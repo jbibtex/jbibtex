@@ -34,25 +34,25 @@ TOKEN :
 <DEFAULT>
 TOKEN :
 {
-	< SPECIAL : [ "#", "$", "%", "&", "^", "_", "~" ] >
+	< SPECIAL : ["#", "$", "%", "&", "^", "_", "~"] >
 	|
-	< NON_SPECIAL : [ "!"-"\"", "\'"-"/", ":"-"@", "[", "]", "`", "|", "\u007f" ] >
+	< NON_SPECIAL : ["!"-"\"", "\'"-"/", ":"-"@", "[", "]", "`", "|", "\u007f"] >
 }
 
 <DEFAULT>
 TOKEN :
 {
-	< LETTER : [ "a"-"z", "A"-"Z" ] >
+	< LETTER : ["a"-"z", "A"-"Z"] >
 	|
-	< NUMBER : [ "0"-"9" ] >
+	< NUMBER : ["0"-"9"] >
 	|
-	< SUPPLEMENT : [ "\u00a0"-"\u00ff" ] >
+	< SUPPLEMENT : ["\u00a0"-"\u00ff"] >
 }
 
 <DEFAULT>
 TOKEN :
 {
-	< WHITESPACE : [ "\t", "\n", " " ] >
+	< WHITESPACE : ["\t", "\n", " "] >
 }
 
 private List<LaTeXObject> LaTeX() :
@@ -220,9 +220,9 @@ private String TextCharacter() :
 		|
 		token = <NUMBER>
 		|
-		token = <WHITESPACE>
-		|
 		token = <SUPPLEMENT>
+		|
+		token = <WHITESPACE>
 	)
 
 	{
