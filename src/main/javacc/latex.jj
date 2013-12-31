@@ -45,6 +45,8 @@ TOKEN :
 	< LETTER : [ "a"-"z", "A"-"Z" ] >
 	|
 	< NUMBER : [ "0"-"9" ] >
+	|
+	< SUPPLEMENT : [ "\u00a0"-"\u00ff" ] >
 }
 
 <DEFAULT>
@@ -219,6 +221,8 @@ private String TextCharacter() :
 		token = <NUMBER>
 		|
 		token = <WHITESPACE>
+		|
+		token = <SUPPLEMENT>
 	)
 
 	{
