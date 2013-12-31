@@ -593,7 +593,7 @@ private Value SimpleValue() :
 
 JAVACODE
 private String Literal(int braceLevel, String delimiter) throws ParseException {
-	StringBuffer sb = new StringBuffer(64);
+	StringBuilder sb = new StringBuilder(64);
 
 	if(braceLevel < 0){
 		throw new IllegalArgumentException();

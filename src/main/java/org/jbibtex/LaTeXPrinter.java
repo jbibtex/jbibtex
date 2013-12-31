@@ -343,7 +343,7 @@ public class LaTeXPrinter {
 	static
 	private class TextBuilder {
 
-		private StringBuffer sb = new StringBuffer();
+		private StringBuilder sb = new StringBuilder();
 
 		private char accent = 0;
 

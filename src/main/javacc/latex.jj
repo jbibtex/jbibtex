@@ -120,7 +120,7 @@ private LaTeXCommand Command() :
 
 private String Name() :
 {
-	StringBuffer sb = new StringBuffer(16);
+	StringBuilder sb = new StringBuilder(16);
 
 	Token token;
 }
@@ -196,7 +196,7 @@ private LaTeXGroup Group() :
 
 private LaTeXString String() :
 {
-	StringBuffer sb = new StringBuffer(64);
+	StringBuilder sb = new StringBuilder(64);
 
 	String string;
 }
