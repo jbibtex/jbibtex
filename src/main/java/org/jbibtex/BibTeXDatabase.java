@@ -17,46 +17,62 @@ public class BibTeXDatabase {
 
 
 	public void addObject(BibTeXObject object){
-		this.objects.add(object);
+		boolean success;
 
 		if(object instanceof BibTeXInclude){
 			BibTeXInclude include = (BibTeXInclude)object;
 
-			this.includes.add(include);
+			success = this.includes.add(include);
 		} else
 
 		if(object instanceof BibTeXString){
 			BibTeXString string = (BibTeXString)object;
 
-			this.strings.put(string.getKey(), string);
+			success = this.strings.putIfMissing(string.getKey(), string);
 		} else
 
 		if(object instanceof BibTeXEntry){
 			BibTeXEntry entry = (BibTeXEntry)object;
 
-			this.entries.put(entry.getKey(), entry);
+			success = this.entries.putIfMissing(entry.getKey(), entry);
+		} else
+
+		{
+			success = true;
+		} // End if
+
+		if(success){
+			this.objects.add(object);
 		}
 	}
 
 	public void removeObject(BibTeXObject object){
-		this.objects.remove(object);
+		boolean success;
 
 		if(object instanceof BibTeXInclude){
 			BibTeXInclude include = (BibTeXInclude)object;
 
-			this.includes.remove(include);
+			success = this.includes.remove(include);
 		} else
 
 		if(object instanceof BibTeXString){
 			BibTeXString string = (BibTeXString)object;
 
-			this.strings.remove(string.getKey());
+			success = this.strings.removeIfPresent(string.getKey());
 		} else
 
 		if(object instanceof BibTeXEntry){
 			BibTeXEntry entry = (BibTeXEntry)object;
 
-			this.entries.remove(entry.getKey());
+			success = this.entries.removeIfPresent(entry.getKey());
+		} else
+
+		{
+			success = true;
+		} // End if
+
+		if(success){
+			this.objects.remove(object);
 		}
 	}
 
