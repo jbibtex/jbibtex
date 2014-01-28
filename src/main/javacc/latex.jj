@@ -46,7 +46,7 @@ TOKEN :
 	|
 	< NUMBER : ["0"-"9"] >
 	|
-	< SUPPLEMENT : ["\u00a0"-"\u00ff"] >
+	< SUPPLEMENT : ["\u00a0"-"\u01ff"] >
 }
 
 <DEFAULT>

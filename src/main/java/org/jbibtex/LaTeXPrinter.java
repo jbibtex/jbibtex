@@ -160,7 +160,9 @@ public class LaTeXPrinter {
 						return '\u00d3';
 					case 'U':
 						return '\u00da';
-					case 'a':
+                    case 'Y':
+                        return '\u00dd';
+                    case 'a':
 						return '\u00e1';
 					case 'e':
 						return '\u00e9';
@@ -170,7 +172,9 @@ public class LaTeXPrinter {
 						return '\u00f3';
 					case 'u':
 						return '\u00fa';
-					default:
+                    case 'y':
+                        return '\u00fd';
+                    default:
 						break;
 				}
 				break;
@@ -224,18 +228,47 @@ public class LaTeXPrinter {
 						return '\u010c';
 					case 'S':
 						return '\u0160';
-					case 'Z':
-						return '\u017d';
+                    case 'Z':
+                        return '\u017d';
+                    case 'E':
+                        return '\u0114';
+                    case 'R':
+                        return '\u0158';
+                    case 'D':
+                        return '\u010E';
+                    case 'N':
+                        return '\u0147';
+                    case 'T':
+                        return '\u0164';
 					case 'c':
 						return '\u010d';
 					case 's':
 						return '\u0161';
 					case 'z':
 						return '\u017e';
-					default:
+                    case 'e':
+                        return '\u0115';
+                    case 'r':
+                        return '\u0159';
+                    case 'd':
+                        return '\u010F';
+                    case 'n':
+                        return '\u0148';
+                    case 't':
+                        return '\u0165';
+                    default:
 						break;
 				}
-				break;
+            case 'r':
+                switch(c){
+                    case 'U':
+                        return '\u016e';
+                    case 'u':
+                        return '\u016f';
+                    default:
+                        break;
+                }
+                break;
 			default:
 				break;
 		}
