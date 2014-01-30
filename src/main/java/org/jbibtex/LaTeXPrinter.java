@@ -122,6 +122,7 @@ public class LaTeXPrinter {
 	private char applyAccent(char accent, char c){
 
 		switch(accent){
+			// Grave
 			case '`':
 				switch(c){
 					case 'A':
@@ -148,6 +149,7 @@ public class LaTeXPrinter {
 						break;
 				}
 				break;
+			// Acute
 			case '\'':
 				switch(c){
 					case 'A':
@@ -160,6 +162,8 @@ public class LaTeXPrinter {
 						return '\u00d3';
 					case 'U':
 						return '\u00da';
+					case 'Y':
+						return '\u00dd';
 					case 'a':
 						return '\u00e1';
 					case 'e':
@@ -170,10 +174,13 @@ public class LaTeXPrinter {
 						return '\u00f3';
 					case 'u':
 						return '\u00fa';
+					case 'y':
+						return '\u00fd';
 					default:
 						break;
 				}
 				break;
+			// Diaeresis
 			case '\"':
 				switch(c){
 					case 'A':
@@ -200,6 +207,7 @@ public class LaTeXPrinter {
 						break;
 				}
 				break;
+			// Tilde
 			case '~':
 				switch(c){
 					case 'A':
@@ -218,18 +226,50 @@ public class LaTeXPrinter {
 						break;
 				}
 				break;
+			// Ring above
+			case 'r':
+				switch(c){
+					case 'U':
+						return '\u016e';
+					case 'u':
+						return '\u016f';
+					default:
+						break;
+				}
+				break;
+			// Caron
 			case 'v':
 				switch(c){
 					case 'C':
 						return '\u010c';
+					case 'D':
+						return '\u010e';
+					case 'E':
+						return '\u011a';
+					case 'N':
+						return '\u0147';
+					case 'R':
+						return '\u0158';
 					case 'S':
 						return '\u0160';
+					case 'T':
+						return '\u0164';
 					case 'Z':
 						return '\u017d';
 					case 'c':
 						return '\u010d';
+					case 'd':
+						return '\u010f';
+					case 'e':
+						return '\u011b';
+					case 'n':
+						return '\u0148';
+					case 'r':
+						return '\u0159';
 					case 's':
 						return '\u0161';
+					case 't':
+						return '\u0165';
 					case 'z':
 						return '\u017e';
 					default:
