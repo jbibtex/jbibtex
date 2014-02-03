@@ -47,6 +47,8 @@ TOKEN :
 	< ASCII_DIGIT : ["0"-"9"] >
 	|
 	< LATIN_SUPPLEMENT : ["\u00a0"-"\u00ff"] >
+	|
+	< UNICODE_LETTER : ["\u0100"-"\u1fff", "\u20ac", "\u2122"] >
 }
 
 <DEFAULT>
@@ -221,6 +223,8 @@ private String TextCharacter() :
 		token = <ASCII_DIGIT>
 		|
 		token = <LATIN_SUPPLEMENT>
+		|
+		token = <UNICODE_LETTER>
 		|
 		token = <WHITESPACE>
 	)
