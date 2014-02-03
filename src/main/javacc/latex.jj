@@ -42,11 +42,11 @@ TOKEN :
 <DEFAULT>
 TOKEN :
 {
-	< LETTER : ["a"-"z", "A"-"Z"] >
+	< ASCII_LETTER : ["a"-"z", "A"-"Z"] >
 	|
-	< NUMBER : ["0"-"9"] >
+	< ASCII_DIGIT : ["0"-"9"] >
 	|
-	< SUPPLEMENT : ["\u00a0"-"\u00ff"] >
+	< LATIN_SUPPLEMENT : ["\u00a0"-"\u00ff"] >
 }
 
 <DEFAULT>
@@ -125,7 +125,7 @@ private String Name() :
 	Token token;
 }
 {
-	token = <LETTER> { sb.append(token.image); } ( LOOKAHEAD( <LETTER> ) token = <LETTER> { sb.append(token.image); } )*
+	token = <ASCII_LETTER> { sb.append(token.image); } ( LOOKAHEAD( <ASCII_LETTER> ) token = <ASCII_LETTER> { sb.append(token.image); } )*
 
 	{
 		return sb.toString();
@@ -216,11 +216,11 @@ private String TextCharacter() :
 	(
 		token = <NON_SPECIAL>
 		|
-		token = <LETTER>
+		token = <ASCII_LETTER>
 		|
-		token = <NUMBER>
+		token = <ASCII_DIGIT>
 		|
-		token = <SUPPLEMENT>
+		token = <LATIN_SUPPLEMENT>
 		|
 		token = <WHITESPACE>
 	)

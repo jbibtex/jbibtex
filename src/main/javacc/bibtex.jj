@@ -261,19 +261,15 @@ TOKEN :
 <DEFAULT>
 TOKEN :
 {
-	< NAME : ( <ASCII_LETTER> | <ASCII_DIGIT> | <UNICODE_LETTER> | <NAME_START_SYMBOL> ) ( <ASCII_LETTER> | <ASCII_DIGIT> | <UNICODE_LETTER> | <NAME_CONTINUATION_SYMBOL> )* >
+	< NAME : ( <ASCII_LETTER> | <ASCII_DIGIT> | <LATIN_LETTER> | <UNICODE_LETTER> | <NAME_START_SYMBOL> ) ( <ASCII_LETTER> | <ASCII_DIGIT> | <LATIN_LETTER> | <UNICODE_LETTER> | <NAME_CONTINUATION_SYMBOL> )* >
 	|
 	< #ASCII_LETTER : ["a"-"z", "A"-"Z"] >
 	|
 	< #ASCII_DIGIT : ["0"-"9"] >
 	|
-	< #UNICODE_LETTER : 
-		[
-			"\u00c0"-"\u00d6", "\u00d8"-"\u00f6", "\u00f8"-"\u00ff",
-			"\u0100"-"\u1fff",
-			"\u20ac", "\u2122"
-		]
-	>
+	< #LATIN_LETTER : ["\u00c0"-"\u00d6", "\u00d8"-"\u00f6", "\u00f8"-"\u00ff"] >
+	|
+	< #UNICODE_LETTER : ["\u0100"-"\u1fff", "\u20ac", "\u2122"] >
 	|
 	< #NAME_START_SYMBOL : ["(", "-", "_"] >
 	|
