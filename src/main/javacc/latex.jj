@@ -34,6 +34,8 @@ TOKEN :
 <DEFAULT>
 TOKEN :
 {
+	< WHITESPACE : ["\t", "\n", " "] >
+	|
 	< SPECIAL : ["#", "$", "%", "&", "^", "_", "~"] >
 	|
 	< NON_SPECIAL : ["!"-"\"", "\'"-"/", ":"-"@", "[", "]", "`", "|", "\u007f"] >
@@ -49,12 +51,6 @@ TOKEN :
 	< LATIN_SUPPLEMENT : ["\u00a0"-"\u00ff"] >
 	|
 	< UNICODE_LETTER : ["\u0100"-"\u1fff", "\u20ac", "\u2122"] >
-}
-
-<DEFAULT>
-TOKEN :
-{
-	< WHITESPACE : ["\t", "\n", " "] >
 }
 
 private List<LaTeXObject> LaTeX() :
@@ -216,6 +212,8 @@ private String TextCharacter() :
 }
 {
 	(
+		token = <WHITESPACE>
+		|
 		token = <NON_SPECIAL>
 		|
 		token = <ASCII_LETTER>
@@ -225,8 +223,6 @@ private String TextCharacter() :
 		token = <LATIN_SUPPLEMENT>
 		|
 		token = <UNICODE_LETTER>
-		|
-		token = <WHITESPACE>
 	)
 
 	{
