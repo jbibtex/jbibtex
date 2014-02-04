@@ -15,7 +15,7 @@ The library JAR file (together with source and javadoc JAR files) is distributed
 
 # Usage #
 
-## Parsing BibTeX ##
+### Parsing BibTeX ###
 
 Typical scenario:
 ```java
@@ -26,7 +26,7 @@ org.jbibtex.BibTeXParser bibtexParser = new org.jbibtex.BibTeXParser();
 org.jbibtex.BibTeXDatabase database = bibtexParser.parse(reader);
 ```
 
-BibTeX parser performs automatic string constants and crossref field resolution. The default behavior is to prohibit unresolved references by throwing an unchecked exception `org.jbibtex.ObjectResolutionException`. The default behavior can be overriden as follows:
+BibTeX parser performs automatic string constants and crossref fields resolution. The default behavior is to prohibit unresolved references by throwing an unchecked exception `org.jbibtex.ObjectResolutionException`. The default behavior can be overriden as follows:
 ```java
 org.jbibtex.BibTeXParser bibtexParser = new org.jbibtex.BibTeXParser(){
 
@@ -48,7 +48,7 @@ org.jbibtex.BibTeXParser bibtexParser = new org.jbibtex.BibTeXParser(){
 };
 ```
 
-**Caution**: methods `org.jbibtex.BibTeXParser#parse(java.io.Reader)` and `org.jbibtex.LaTeXParser#parse(java.io.Reader)` may throw error `org.jbibtex.TokenMgrError` if the input contains illegal characters or is otherwise problematic. Library users are advised to wrap affected portions of their code with appropriate try-catch statements. An unhandled `org.jbibtex.TokenMgrError` will bring down the JVM process.
+**Caution**: methods `org.jbibtex.BibTeXParser#parse(java.io.Reader)` and `org.jbibtex.LaTeXParser#parse(java.io.Reader)` may throw error `org.jbibtex.TokenMgrError` if the input contains illegal characters or is otherwise problematic. Library users are advised to surround the affected portions of their code with appropriate try-catch statements. An unhandled `org.jbibtex.TokenMgrError` could terminate the JVM process.
 
 Library users may use class `org.jbibtex.CharacterFilterReader` to skip illegal characters in the input:
 ```java
@@ -59,7 +59,7 @@ org.jbibtex.CharacterFilterReader filterReader = new org.jbibtex.CharacterFilter
 bibtexParser.parse(filterReader);
 ``` 
 
-## Formatting BibTeX ##
+### Formatting BibTeX ###
 
 Typical scenario:
 ```java
@@ -72,7 +72,7 @@ org.jbibtex.BibTeXFormatter bibtexFormatter = new org.jbibtex.BibTeXFormatter();
 bibtexFormatter.format(database, writer);
 ```
 
-## Working with BibTeX database ##
+### Working with BibTeX databases ###
 
 Iterating over all the BibTeX entries in the BibTeX database and retrieving their title field:
 ```java
@@ -103,7 +103,7 @@ if(string.indexOf('\\') > -1 || string.indexOf('{') > -1){
 }
 ```
 
-## Translating LaTeX strings to plain text strings ##
+### Translating LaTeX strings to plain text strings ###
 
 Typical scenario:
 ```java
