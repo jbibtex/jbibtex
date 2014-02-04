@@ -18,7 +18,12 @@ public class BibTeXParser {
 		this(new StringReader(""));
 	}
 
-	public BibTeXDatabase parse(Reader reader) throws IOException, ParseException {
+	/**
+	 * @throws TokenMgrError If the input contains invalid characters.
+	 *
+	 * @see CharacterFilterReader
+	 */
+	public BibTeXDatabase parse(Reader reader) throws ParseException, TokenMgrError {
 		ReInit(reader);
 
 		token_source.SwitchTo(IN_HEADER);

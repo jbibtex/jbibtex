@@ -13,7 +13,12 @@ public class LaTeXParser {
 		this(new StringReader(""));
 	}
 
-	public List<LaTeXObject> parse(Reader reader) throws IOException, ParseException {
+	/**
+	 * @throws TokenMgrError If the input contains invalid characters
+	 *
+	 * @see CharacterFilterReader
+	 */
+	public List<LaTeXObject> parse(Reader reader) throws ParseException, TokenMgrError {
 		ReInit(reader);
 
 		return LaTeX();
