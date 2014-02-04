@@ -91,7 +91,7 @@ for(org.jbibtex.BibTeXEntry entry : entries){
 }
 ```
 
-BibTeX entry values could be in LaTeX data format. The easiest way to distinguish between plain text and LaTeX text values is to look for LaTeX special symbols `\` and '{':
+BibTeX entry values could be in LaTeX data format. The easiest way to distinguish between plain text and LaTeX text values is to look for LaTeX special symbols `\` and `{`:
 ```java
 org.jbibtex.Value value = ...
 
