@@ -1,6 +1,11 @@
 /*
  * Copyright (c) 2012 University of Tartu
  */
+options {
+	JAVA_TEMPLATE_TYPE = "modern";
+	JDK_VERSION = "1.5";
+}
+
 PARSER_BEGIN(BibTeXParser)
 package org.jbibtex;
 
@@ -15,16 +20,16 @@ public class BibTeXParser {
 
 
 	public BibTeXParser(){
-		this(new StringReader(""));
+		this("");
 	}
 
 	/**
-	 * @throws TokenMgrError If the input contains invalid characters.
+	 * @throws TokenMgrException If the input contains invalid characters.
 	 *
 	 * @see CharacterFilterReader
 	 */
-	public BibTeXDatabase parse(Reader reader) throws ParseException, TokenMgrError {
-		ReInit(reader);
+	public BibTeXDatabase parse(Reader reader) throws ParseException, TokenMgrException {
+		ReInit(new StreamProvider(reader));
 
 		token_source.SwitchTo(IN_HEADER);
 
@@ -553,17 +558,19 @@ private Value SimpleValue() :
 	String string;
 
 	Token token;
+
+	Value result = null;
 }
 {
 	(
 		<LBRACE> string = Literal(1, "}")
 		{
-			return new StringValue(string, StringValue.Style.BRACED);
+			result = new StringValue(string, StringValue.Style.BRACED);
 		}
 		|
 		<QUOTE> string = Literal(0, "\"")
 		{
-			return new StringValue(string, StringValue.Style.QUOTED);
+			result = new StringValue(string, StringValue.Style.QUOTED);
 		}
 		|
 		token = Name()
@@ -582,14 +589,21 @@ private Value SimpleValue() :
 
 				checkStringResolution(key, object);
 
-				return new ReferenceValue(value, object);
+				result = new ReferenceValue(value, object);
 			} else
 
 			{
-				return new DigitStringValue(token.image);
+				result = new DigitStringValue(token.image);
 			}
 		}
 	)
+	{
+		if(result == null){
+			throw new ParseException();
+		}
+
+		return result;
+	}
 }
 
 JAVACODE

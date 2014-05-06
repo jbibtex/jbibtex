@@ -72,6 +72,13 @@
 					<isStatic>false</isStatic>
 					<keepLineColumn>true</keepLineColumn>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>net.java.dev.javacc</groupId>
+						<artifactId>javacc</artifactId>
+						<version>6.1.2</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>

@@ -1,6 +1,12 @@
 /*
  * Copyright (c) 2012 University of Tartu
  */
+options {
+	GENERATE_BOILERPLATE = false;
+	JAVA_TEMPLATE_TYPE = "modern";
+	JDK_VERSION = "1.5";
+}
+
 PARSER_BEGIN(LaTeXParser)
 package org.jbibtex;
 
@@ -10,23 +16,23 @@ import java.util.*;
 public class LaTeXParser {
 
 	public LaTeXParser(){
-		this(new StringReader(""));
+		this("");
 	}
 
 	/**
 	 * @see LaTeXParser#parse(Reader)
 	 */
-	public List<LaTeXObject> parse(String string) throws ParseException, TokenMgrError {
+	public List<LaTeXObject> parse(String string) throws ParseException, TokenMgrException {
 		return parse(new StringReader(string));
 	}
 
 	/**
-	 * @throws TokenMgrError If the input contains invalid characters
+	 * @throws TokenMgrException If the input contains invalid characters
 	 *
 	 * @see CharacterFilterReader
 	 */
-	public List<LaTeXObject> parse(Reader reader) throws ParseException, TokenMgrError {
-		ReInit(reader);
+	public List<LaTeXObject> parse(Reader reader) throws ParseException, TokenMgrException {
+		ReInit(new StreamProvider(reader));
 
 		return LaTeX();
 	}

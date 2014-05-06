@@ -48,7 +48,7 @@ org.jbibtex.BibTeXParser bibtexParser = new org.jbibtex.BibTeXParser(){
 };
 ```
 
-**Caution**: methods `org.jbibtex.BibTeXParser#parse(java.io.Reader)` and `org.jbibtex.LaTeXParser#parse(java.io.Reader)` may throw error `org.jbibtex.TokenMgrError` if the input contains illegal characters or is otherwise problematic. Library users are advised to surround the affected portions of their code with appropriate try-catch statements. An unhandled `org.jbibtex.TokenMgrError` could terminate the JVM process.
+**Caution**: Prior to JBibTeX version 1.0.12, methods `org.jbibtex.BibTeXParser#parse(java.io.Reader)` and `org.jbibtex.LaTeXParser#parse(java.io.Reader)` may throw error `org.jbibtex.TokenMgrError` if the input contains illegal characters or is otherwise problematic. Library users are advised to surround the affected portions of their code with appropriate try-catch statements. An unhandled `org.jbibtex.TokenMgrError` could terminate the JVM process.
 
 Library users may use class `org.jbibtex.CharacterFilterReader` to skip illegal characters in the input:
 ```java
