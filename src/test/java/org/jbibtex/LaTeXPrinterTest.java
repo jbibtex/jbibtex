@@ -12,6 +12,14 @@ import static org.junit.Assert.*;
 
 public class LaTeXPrinterTest {
 
+	private LaTeXParser parser = null;
+
+
+	@Before
+	public void init() throws ParseException {
+		this.parser = new LaTeXParser();
+	}
+
 	@Test
 	public void printDash() throws Exception {
 		assertEquals("\u2013", print("--"));
@@ -51,7 +59,6 @@ public class LaTeXPrinterTest {
 		assertEquals(LaTeXPrinter.today(), print("\\today"));
 	}
 
-	static
 	private String print(String string) throws Exception {
 		LaTeXPrinter printer = new LaTeXPrinter();
 
@@ -60,14 +67,11 @@ public class LaTeXPrinterTest {
 		return printer.print(objects);
 	}
 
-	static
 	private List<LaTeXObject> parse(String string) throws Exception {
 		Reader reader = new StringReader(string);
 
 		try {
-			LaTeXParser parser = new LaTeXParser();
-
-			return parser.parse(reader);
+			return this.parser.parse(reader);
 		} finally {
 			reader.close();
 		}

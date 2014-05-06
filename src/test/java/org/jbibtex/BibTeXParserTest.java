@@ -12,8 +12,13 @@ import static org.junit.Assert.*;
 
 public class BibTeXParserTest {
 
+	private BibTeXParser parser = null;
+
+
 	@Before
-	public void initAckMacros(){
+	public void init() throws ParseException {
+		this.parser = new BibTeXParser();
+
 		String[] macros = {"ack-bnb", "ack-bs", "ack-hk", "ack-kl", "ack-kr", "ack-pb", "ack-rfb"};
 
 		for(String macro : macros){
@@ -86,7 +91,6 @@ public class BibTeXParserTest {
 		parse("/zotero.bib");
 	}
 
-	static
 	private BibTeXDatabase parse(String path) throws IOException, ParseException {
 		InputStream is = (BibTeXParserTest.class).getResourceAsStream(path);
 
@@ -94,9 +98,7 @@ public class BibTeXParserTest {
 			Reader reader = new InputStreamReader(is, "US-ASCII");
 
 			try {
-				BibTeXParser parser = new BibTeXParser();
-
-				return parser.parse(reader);
+				return this.parser.parse(reader);
 			} finally {
 				reader.close();
 			}
