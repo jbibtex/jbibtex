@@ -68,10 +68,6 @@
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<isStatic>false</isStatic>
-					<keepLineColumn>true</keepLineColumn>
-				</configuration>
 				<dependencies>
 					<dependency>
 						<groupId>net.java.dev.javacc</groupId>

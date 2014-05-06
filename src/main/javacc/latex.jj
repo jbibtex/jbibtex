@@ -5,6 +5,8 @@ options {
 	GENERATE_BOILERPLATE = false;
 	JAVA_TEMPLATE_TYPE = "modern";
 	JDK_VERSION = "1.5";
+	KEEP_LINE_COLUMN = true;
+	STATIC = false;
 }
 
 PARSER_BEGIN(LaTeXParser)
@@ -15,7 +17,7 @@ import java.util.*;
 
 public class LaTeXParser {
 
-	public LaTeXParser(){
+	public LaTeXParser() throws ParseException {
 		this("");
 	}
 

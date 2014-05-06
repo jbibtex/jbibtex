@@ -4,6 +4,8 @@
 options {
 	JAVA_TEMPLATE_TYPE = "modern";
 	JDK_VERSION = "1.5";
+	KEEP_LINE_COLUMN = true;
+	STATIC = false;
 }
 
 PARSER_BEGIN(BibTeXParser)
@@ -19,7 +21,7 @@ public class BibTeXParser {
 	private long id = 1L;
 
 
-	public BibTeXParser(){
+	public BibTeXParser() throws ParseException {
 		this("");
 	}
 
