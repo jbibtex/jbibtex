@@ -27,6 +27,11 @@ public class BibTeXParserTest {
 	}
 
 	@Test
+	public void parseBibtex() throws Exception {
+		parse("/bibtex.bib");
+	}
+
+	@Test
 	public void parseJava() throws Exception {
 		BibTeXDatabase database = parse("/java.bib");
 

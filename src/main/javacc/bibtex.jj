@@ -436,7 +436,7 @@ private BibTeXEntry Entry() :
 			LOOKAHEAD( Identifier() <COMMA> )
 			key = Identifier() <COMMA> fields = AssignmentList()
 			|
-			fields = AssignmentList()
+			( <COMMA> )? fields = AssignmentList()
 		)
 		( <COMMA> )? <RPAREN>
 		|
@@ -445,7 +445,7 @@ private BibTeXEntry Entry() :
 			LOOKAHEAD( Identifier() <COMMA> )
 			key = Identifier() <COMMA> fields = AssignmentList()
 			|
-			fields = AssignmentList()
+			( <COMMA> )? fields = AssignmentList()
 		)
 		( <COMMA> )? <RBRACE>
 	)
