@@ -35,6 +35,9 @@ public class BibTeXParserTest {
 	@Test
 	public void parseJava() throws Exception {
 		BibTeXParser parser = new BibTeXParser();
+		parser.addMacro("ack-bnb", "Barbara N. Beeton");
+		parser.addMacro("ack-bs", "Bruce Schneier");
+		parser.addMacro("ack-kl", "Ken Lunde");
 
 		BibTeXDatabase database = parse(parser, "/java.bib");
 
@@ -71,6 +74,11 @@ public class BibTeXParserTest {
 	@Test
 	public void parseUnix() throws Exception {
 		BibTeXParser parser = new BibTeXParser();
+		parser.addMacro("ack-hk", "Hanna K{\\\"o}lodziejska");
+		parser.addMacro("ack-kl", "Ken Lunde");
+		parser.addMacro("ack-kr", "Karin Remington");
+		parser.addMacro("ack-pb", "Preston Briggs");
+		parser.addMacro("ack-rfb", "Ronald F. Boisvert");
 
 		BibTeXDatabase database = parse(parser, "/unix.bib");
 
@@ -151,13 +159,5 @@ public class BibTeXParserTest {
 		}
 
 		return count;
-	}
-
-	static {
-		String[] macros = {"ack-bnb", "ack-bs", "ack-hk", "ack-kl", "ack-kr", "ack-pb", "ack-rfb"};
-
-		for(String macro : macros){
-			BibTeXParser.addMacro(macro, macro);
-		}
 	}
 }

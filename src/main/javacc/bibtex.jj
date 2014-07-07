@@ -20,6 +20,8 @@ import java.util.Map;
 
 public class BibTeXParser {
 
+	private KeyMap<BibTeXString> macros = new KeyMap<BibTeXString>();
+
 	private BibTeXDatabase database = null;
 
 	private List<Exception> exceptions = new ArrayList<Exception>();
@@ -29,6 +31,20 @@ public class BibTeXParser {
 
 	public BibTeXParser() throws ParseException, TokenMgrException {
 		this("");
+
+		// Default macros
+		addMacro("jan", "January");
+		addMacro("feb", "February");
+		addMacro("mar", "March");
+		addMacro("apr", "April");
+		addMacro("may", "May");
+		addMacro("jun", "June");
+		addMacro("jul", "July");
+		addMacro("aug", "August");
+		addMacro("sep", "September");
+		addMacro("oct", "October");
+		addMacro("nov", "November");
+		addMacro("dec", "December");
 	}
 
 	/**
@@ -146,24 +162,24 @@ public class BibTeXParser {
 		return Collections.unmodifiableList(this.exceptions);
 	}
 
-	static
 	public KeyMap<BibTeXString> getMacros(){
-		return BibTeXParser.macros;
+		return this.macros;
 	}
 
-	static
 	public void addMacro(String key, String value){
 		addMacro(new BibTeXString(new Key(key), new StringValue(value, StringValue.Style.BRACED)));
 	}
 
-	static
 	public void addMacro(BibTeXString macro){
-		BibTeXParser.macros.put(macro.getKey(), macro);
+		this.macros.put(macro.getKey(), macro);
 	}
 
-	static
+	public void removeMacro(String key){
+		this.macros.remove(new Key(key));
+	}
+
 	public void removeMacro(BibTeXString macro){
-		BibTeXParser.macros.remove(macro.getKey());
+		this.macros.remove(macro.getKey());
 	}
 
 	static
@@ -180,24 +196,6 @@ public class BibTeXParser {
 		
 		return (string.length() > 0);
 	}
-
-	private static final KeyMap<BibTeXString> macros = new KeyMap<BibTeXString>();
-
-	static {
-		addMacro("jan", "January");
-		addMacro("feb", "February");
-		addMacro("mar", "March");
-		addMacro("apr", "April");
-		addMacro("may", "May");
-		addMacro("jun", "June");
-		addMacro("jul", "July");
-		addMacro("aug", "August");
-		addMacro("sep", "September");
-		addMacro("oct", "October");
-		addMacro("nov", "November");
-		addMacro("dec", "December");
-	}
-
 
 	static
 	private class Field {
@@ -654,7 +652,9 @@ private Value SimpleValue() :
 
 				BibTeXString object = getDatabase().resolveString(key);
 				if(object == null){
-					object = (BibTeXParser.getMacros()).get(key);
+					KeyMap<BibTeXString> macros = getMacros();
+
+					object = macros.get(key);
 				}
 
 				checkStringResolution(key, object);
