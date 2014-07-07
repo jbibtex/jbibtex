@@ -3,7 +3,9 @@
  */
 package org.jbibtex;
 
-import java.io.*;
+import java.io.FilterReader;
+import java.io.IOException;
+import java.io.Reader;
 
 public class CharacterFilterReader extends FilterReader {
 

@@ -3,7 +3,8 @@
  */
 package org.jbibtex;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
 
 public class BibTeXEntry extends BibTeXObject {
 

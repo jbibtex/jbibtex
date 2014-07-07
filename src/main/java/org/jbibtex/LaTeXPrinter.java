@@ -3,8 +3,12 @@
  */
 package org.jbibtex;
 
-import java.text.*;
-import java.util.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class LaTeXPrinter {
 

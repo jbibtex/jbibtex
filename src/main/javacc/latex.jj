@@ -12,8 +12,10 @@ options {
 PARSER_BEGIN(LaTeXParser)
 package org.jbibtex;
 
-import java.io.*;
-import java.util.*;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LaTeXParser {
 

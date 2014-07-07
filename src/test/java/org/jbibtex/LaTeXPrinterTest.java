@@ -3,12 +3,14 @@
  */
 package org.jbibtex;
 
-import java.io.*;
-import java.util.*;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.List;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class LaTeXPrinterTest {
 

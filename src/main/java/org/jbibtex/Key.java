@@ -3,7 +3,7 @@
  */
 package org.jbibtex;
 
-import java.util.*;
+import java.util.Locale;
 
 public class Key {
 

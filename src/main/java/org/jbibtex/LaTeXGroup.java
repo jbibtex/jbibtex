@@ -3,7 +3,8 @@
  */
 package org.jbibtex;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 
 public class LaTeXGroup extends LaTeXObject {
 
