@@ -1,15 +1,18 @@
+JBibTeX [![Build Status](https://travis-ci.org/jbibtex/jbibtex.png?branch=master)](https://travis-ci.org/jbibtex/jbibtex)
+=======
+
 Java BibTeX and LaTeX parser and formatter library
 
 # Installation #
 
-The current version of JBibTeX is **1.0.13** (28 May, 2014).
+The current version of JBibTeX is **1.0.14** (7 July, 2014).
 
 The library JAR file (together with source and javadoc JAR files) is distributed via Maven Central repository:
 ```xml
 <dependency>
 	<groupId>org.jbibtex</groupId>
 	<artifactId>jbibtex</artifactId>
-	<version>1.0.13/version>
+	<version>1.0.14/version>
 </dependency>
 ```
 
@@ -121,3 +124,7 @@ org.jbibtex.LaTeXPrinter latexPrinter = new org.jbibtex.LaTeXPrinter();
 
 String plainTextString = latexPrinter.print(latexObjects);
 ```
+
+# License #
+
+JBibTeX is licensed under the [BSD 3-Clause License] (http://opensource.org/licenses/BSD-3-Clause).
