@@ -3,7 +3,6 @@
  */
 package org.jbibtex;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -11,35 +10,33 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class BibTeXParserTest {
 
-	private BibTeXParser parser = null;
-
-
-	@Before
-	public void init() throws ParseException {
-		this.parser = new BibTeXParser();
-
-		String[] macros = {"ack-bnb", "ack-bs", "ack-hk", "ack-kl", "ack-kr", "ack-pb", "ack-rfb"};
-
-		for(String macro : macros){
-			BibTeXParser.addMacro(macro, macro);
-		}
-	}
-
 	@Test
 	public void parseBibtex() throws Exception {
-		parse("/bibtex.bib");
+		BibTeXParser parser = new BibTeXParser();
+
+		BibTeXDatabase database = parseFully(parser, "/bibtex.bib");
+
+		Map<Key, BibTeXEntry> entries = database.getEntries();
+
+		assertNotNull(entries.get(new Key("post_error")));
+
+		List<Exception> exceptions = parser.getExceptions();
+
+		assertEquals(1, exceptions.size());
 	}
 
 	@Test
 	public void parseJava() throws Exception {
-		BibTeXDatabase database = parse("/java.bib");
+		BibTeXParser parser = new BibTeXParser();
+
+		BibTeXDatabase database = parse(parser, "/java.bib");
 
 		List<BibTeXObject> objects = database.getObjects();
 		assertEquals(4498, objects.size());
@@ -66,12 +63,16 @@ public class BibTeXParserTest {
 
 	@Test
 	public void parseMendeley() throws Exception {
-		parse("/mendeley.bib");
+		BibTeXParser parser = new BibTeXParser();
+
+		parse(parser, "/mendeley.bib");
 	}
 
 	@Test
 	public void parseUnix() throws Exception {
-		BibTeXDatabase database = parse("/unix.bib");
+		BibTeXParser parser = new BibTeXParser();
+
+		BibTeXDatabase database = parse(parser, "/unix.bib");
 
 		List<BibTeXObject> objects = database.getObjects();
 		assertEquals(2632, objects.size());
@@ -99,17 +100,37 @@ public class BibTeXParserTest {
 
 	@Test
 	public void parseZotero() throws Exception {
-		parse("/zotero.bib");
+		BibTeXParser parser = new BibTeXParser();
+
+		parse(parser, "/zotero.bib");
 	}
 
-	private BibTeXDatabase parse(String path) throws IOException, ParseException {
+	static
+	private BibTeXDatabase parse(BibTeXParser parser, String path) throws Exception {
 		InputStream is = (BibTeXParserTest.class).getResourceAsStream(path);
 
 		try {
 			Reader reader = new InputStreamReader(is, "US-ASCII");
 
 			try {
-				return this.parser.parse(reader);
+				return parser.parse(reader);
+			} finally {
+				reader.close();
+			}
+		} finally {
+			is.close();
+		}
+	}
+
+	static
+	private BibTeXDatabase parseFully(BibTeXParser parser, String path) throws Exception {
+		InputStream is = (BibTeXParserTest.class).getResourceAsStream(path);
+
+		try {
+			Reader reader = new InputStreamReader(is, "US-ASCII");
+
+			try {
+				return parser.parseFully(reader);
 			} finally {
 				reader.close();
 			}
@@ -130,5 +151,13 @@ public class BibTeXParserTest {
 		}
 
 		return count;
+	}
+
+	static {
+		String[] macros = {"ack-bnb", "ack-bs", "ack-hk", "ack-kl", "ack-kr", "ack-pb", "ack-rfb"};
+
+		for(String macro : macros){
+			BibTeXParser.addMacro(macro, macro);
+		}
 	}
 }

@@ -13,6 +13,7 @@ package org.jbibtex;
 
 import java.io.FileReader;
 import java.io.Reader;
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,24 +22,55 @@ public class BibTeXParser {
 
 	private BibTeXDatabase database = null;
 
+	private List<Exception> exceptions = new ArrayList<Exception>();
+
 	private long id = 1L;
 
 
-	public BibTeXParser() throws ParseException {
+	public BibTeXParser() throws ParseException, TokenMgrException {
 		this("");
 	}
 
 	/**
-	 * @throws TokenMgrException If the input contains invalid characters.
+	 * Parses the BibTeX document in "normal" mode.
+	 * The parser throws an exception is an error condition is detected.
+	 *
+	 * @throws ObjectResolutionException If the database is inconsistent.
+	 *
+	 * @throws TokenMgrException If a token cannot be produced.
+	 * @throws ParseException If the produced sequence of tokens cannot be consumed.
 	 *
 	 * @see CharacterFilterReader
 	 */
-	public BibTeXDatabase parse(Reader reader) throws ParseException, TokenMgrException {
+	public BibTeXDatabase parse(Reader reader) throws ObjectResolutionException, ParseException, TokenMgrException {
 		ReInit(new StreamProvider(reader));
 
 		token_source.SwitchTo(IN_HEADER);
 
-		return Database();
+		return Database(false);
+	}
+
+	/**
+	 * Parses the BibTeX document in "error recovery" mode.
+	 * The parser does its best to recover from typical error conditions by skipping the problematic object definition.
+	 * The parser maintains a {@link #getExceptions() list of exceptions}. This list is cleared when a parse method is invoked again.
+	 *
+	 * @throws ObjectResolutionException If the database is inconsistent.
+	 *
+	 * @see CharacterFilterReader
+	 */
+	public BibTeXDatabase parseFully(Reader reader) throws ObjectResolutionException {
+		ReInit(new StreamProvider(reader));
+
+		token_source.SwitchTo(IN_HEADER);
+
+		try {
+			return Database(true);
+		} catch(TokenMgrException tme){
+			throw new RuntimeException(tme);
+		} catch(ParseException pe){
+			throw new RuntimeException(pe);
+		}
 	}
 
 	/**
@@ -108,6 +140,10 @@ public class BibTeXParser {
 
 	private void setDatabase(BibTeXDatabase database){
 		this.database = database;
+	}
+
+	public List<Exception> getExceptions(){
+		return Collections.unmodifiableList(this.exceptions);
 	}
 
 	static
@@ -194,6 +230,13 @@ public class BibTeXParser {
 	}
 }
 PARSER_END(BibTeXParser)
+
+TOKEN_MGR_DECLS : {
+
+	void backup(int n){
+		input_stream.backup(n);
+	}
+}
 
 <IN_HEADER>
 SKIP :
@@ -291,7 +334,7 @@ TOKEN :
 	< #NAME_CONTINUATION_SYMBOL : ["!", "'", "(", ")", "+", "-", ".", "/", ":", "?", "_"] >
 }
 
-private BibTeXDatabase Database() :
+private BibTeXDatabase Database(boolean performErrorRecovery) :
 {
 	BibTeXDatabase database = new BibTeXDatabase();
 
@@ -300,12 +343,34 @@ private BibTeXDatabase Database() :
 {
 	{
 		setDatabase(database);
+
+		this.exceptions.clear();
 	}
 
 	(
-		<COMMA>
-		|
-		object = Object() { database.addObject(object); } 
+		try {
+			<COMMA>
+			|
+			object = Object() { database.addObject(object); }
+		} catch(TokenMgrException tme){
+
+			if(!performErrorRecovery){
+				throw tme;
+			}
+
+			this.exceptions.add(tme);
+
+			SkipTo("@");
+		} catch(ParseException pe){
+
+			if(!performErrorRecovery){
+				throw pe;
+			}
+
+			this.exceptions.add(pe);
+
+			SkipTo("@");
+		}
 	)* <EOF>
 
 	{
@@ -612,6 +677,31 @@ private Value SimpleValue() :
 }
 
 JAVACODE
+private void SkipTo(String symbol) throws ParseException {
+
+	if(symbol == null){
+		throw new IllegalArgumentException();
+	}
+
+	SetState(IN_LITERAL);
+
+	for(Token prevToken = null, token = getNextToken(); true; prevToken = token, token = getNextToken()){
+
+		if(token.kind == BibTeXParserConstants.EOF){
+			throw new ParseException();
+		} // End if
+
+		if(symbol.equals(token.image)){
+			break;
+		}
+	}
+
+	token_source.backup(symbol.length());
+
+	SetState(DEFAULT);
+}
+
+JAVACODE
 private String Literal(int braceLevel, String delimiter) throws ParseException {
 	StringBuilder sb = new StringBuilder(64);
 
@@ -619,7 +709,7 @@ private String Literal(int braceLevel, String delimiter) throws ParseException {
 		throw new IllegalArgumentException();
 	}
 
-	token_source.SwitchTo(IN_LITERAL);
+	SetState(IN_LITERAL);
 
 	for(Token prevToken = null, token = getNextToken(); true; prevToken = token, token = getNextToken()){
 
@@ -638,7 +728,7 @@ private String Literal(int braceLevel, String delimiter) throws ParseException {
 			if("}".equals(token.image)){
 				braceLevel--;
 			}
-		}// End if
+		} // End if
 
 		if(delimiter.equals(token.image) && braceLevel == 0){
 			break;
@@ -647,7 +737,53 @@ private String Literal(int braceLevel, String delimiter) throws ParseException {
 		sb.append(token.image);
 	}
 
-	token_source.SwitchTo(DEFAULT);
+	SetState(DEFAULT);
 
 	return StringUtil.removeIndent(sb.toString());
+}
+
+/**
+ * JavaCC hack for doing lexical state transitions syntactically
+ *
+ * http://www.engr.mun.ca/~theo/JavaCC-FAQ/SetState.txt
+ */
+JAVACODE
+private void SetState(int state) {
+	if (state != token_source.curLexState) {
+		Token root = new Token(), last=root;
+		root.next = null;
+
+		// First, we build a list of tokens to push back, in backwards order
+		while (token.next != null) {
+			Token t = token;
+			// Find the token whose token.next is the last in the chain
+			while (t.next != null && t.next.next != null)
+				t = t.next;
+
+			// put it at the end of the new chain
+			last.next = t.next;
+			last = t.next;
+
+			// If there are special tokens, these go before the regular tokens,
+			// so we want to push them back onto the input stream in the order
+			// we find them along the specialToken chain.
+			if (t.next.specialToken != null) {
+				Token tt=t.next.specialToken;
+				while (tt != null) {
+					last.next = tt;
+					last = tt;
+					tt.next = null;
+					tt = tt.specialToken;
+				}
+			}
+			t.next = null;
+		};
+
+		while (root.next != null) {
+			token_source.backup(root.next.image.length());
+			root.next = root.next.next;
+		}
+		jj_ntk = -1;
+		token_source.SwitchTo(state);
+	}
 }

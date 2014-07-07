@@ -26,6 +26,10 @@ org.jbibtex.BibTeXParser bibtexParser = new org.jbibtex.BibTeXParser();
 org.jbibtex.BibTeXDatabase database = bibtexParser.parse(reader);
 ```
 
+BibTeX parser provides two parsing modes:
+* `#parse(Reader)`. Normal mode. The parser stops when an error condition is detected.
+* `#parseFully(Reader)`. Error recovery mode. The parser skips an erroneous object definition and continues with the next object definition. The list of error conditions can be accessed via `#getExceptions()`.
+
 BibTeX parser performs automatic string constants and crossref fields resolution. The default behavior is to prohibit unresolved references by throwing an unchecked exception `org.jbibtex.ObjectResolutionException`. The default behavior can be overriden as follows:
 ```java
 org.jbibtex.BibTeXParser bibtexParser = new org.jbibtex.BibTeXParser(){
