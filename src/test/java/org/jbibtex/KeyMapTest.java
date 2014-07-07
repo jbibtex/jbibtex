@@ -1,3 +1,6 @@
+/*
+ * Copyright (c) 2014 University of Tartu
+ */
 package org.jbibtex;
 
 import org.junit.Test;
