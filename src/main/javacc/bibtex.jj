@@ -627,7 +627,7 @@ private Value SimpleValue() :
 
 	Token token;
 
-	Value result = null;
+	Value result;
 }
 {
 	(
@@ -668,10 +668,6 @@ private Value SimpleValue() :
 		}
 	)
 	{
-		if(result == null){
-			throw new ParseException();
-		}
-
 		return result;
 	}
 }
@@ -688,7 +684,7 @@ private void SkipTo(String symbol) throws ParseException {
 	for(Token prevToken = null, token = getNextToken(); true; prevToken = token, token = getNextToken()){
 
 		if(token.kind == BibTeXParserConstants.EOF){
-			throw new ParseException();
+			throw new ParseException("Reached unexpected EOF token");
 		} // End if
 
 		if(symbol.equals(token.image)){
@@ -714,7 +710,7 @@ private String Literal(int braceLevel, String delimiter) throws ParseException {
 	for(Token prevToken = null, token = getNextToken(); true; prevToken = token, token = getNextToken()){
 
 		if(token.kind == BibTeXParserConstants.EOF){
-			throw new ParseException();
+			throw new ParseException("Reached unexpected EOF token");
 		}
 
 		boolean escaped = (prevToken != null && "\\".equals(prevToken.image));
