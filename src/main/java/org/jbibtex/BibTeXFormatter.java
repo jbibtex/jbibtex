@@ -13,12 +13,56 @@ import java.util.Map;
 public class BibTeXFormatter {
 
 	private String indent = "\t";
+        
+        /**
+         * Defines if the formatter must insert blank spaces
+         * before and after the signal of equals "="
+         * that separate the field name and its value.
+         * Some applications that uses another bibtex parser
+         * do not understand the spaces around the signal of equals.
+         */
+        private boolean insertSpaceBetweenFieldNameAndValue = true;
+        
+        /**
+         * Defines if the formatter must insert the closing bracket "}"
+         * alone in a new line for each BibTeX Entry.
+         * Some applications that uses another bibtex parser
+         * do not understand the closing bracket alone in a new line.
+         */
+        private boolean insertBibTeXEntryClosingBracketInNewLine = true;
 
+        /**
+         * Defines if the formatter must insert a comma
+         * after the last field value for each BibTeXEntry.
+         * The comma is placed before the entry closing tag.
+         * Some applications that uses another bibtex parser
+         * expect a comma after the last field value.
+         */
+        private boolean insertCommaAfterLastFieldValueOfBibTeXEntry = false;
 
 	public BibTeXFormatter(){
 	}
 
-	public void format(BibTeXDatabase database, Writer writer) throws IOException {
+        /**
+         * Construct and configure the formatter.
+         * 
+         * @param insertSpaceBetweenFieldNameAndValue 
+         * @param insertBibTeXEntryClosingBracketInNewLine 
+         * @param insertCommaAfterLastFieldValueOfBibTeXEntry 
+         * @see BibTeXFormatter#insertSpaceBetweenFieldNameAndValue
+         * @see BibTeXFormatter#insertBibTeXEntryClosingBracketInNewLine
+         * @see BibTeXFormatter#insertCommaAfterLastFieldValueOfBibTeXEntry
+         */
+	public BibTeXFormatter(boolean insertSpaceBetweenFieldNameAndValue, 
+                boolean insertBibTeXEntryClosingBracketInNewLine,
+                boolean insertCommaAfterLastFieldValueOfBibTeXEntry){
+            this();
+            this.insertSpaceBetweenFieldNameAndValue = insertSpaceBetweenFieldNameAndValue;
+            this.insertBibTeXEntryClosingBracketInNewLine = insertBibTeXEntryClosingBracketInNewLine;
+            this.insertCommaAfterLastFieldValueOfBibTeXEntry = insertCommaAfterLastFieldValueOfBibTeXEntry;
+	}
+
+        public void format(BibTeXDatabase database, Writer writer) throws IOException {
 		List<BibTeXObject> objects = database.getObjects();
 
 		String separator = "";
@@ -27,27 +71,17 @@ public class BibTeXFormatter {
 			writer.write(separator);
 
 			if(object instanceof BibTeXComment){
-				format((BibTeXComment)object, writer);
-			} else
-
-			if(object instanceof BibTeXEntry){
-				format((BibTeXEntry)object, writer);
-			} else
-
-			if(object instanceof BibTeXInclude){
-				format((BibTeXInclude)object, writer);
-			} else
-
-			if(object instanceof BibTeXPreamble){
-				format((BibTeXPreamble)object, writer);
-			} else
-
-			if(object instanceof BibTeXString){
-				format((BibTeXString)object, writer);
-			} else
-
-			{
-				throw new IllegalArgumentException();
+                            format((BibTeXComment)object, writer);
+			} else if(object instanceof BibTeXEntry){
+                            format((BibTeXEntry)object, writer);
+			} else if(object instanceof BibTeXInclude){
+                            format((BibTeXInclude)object, writer);
+			} else if(object instanceof BibTeXPreamble){
+                            format((BibTeXPreamble)object, writer);
+			} else if(object instanceof BibTeXString){
+                            format((BibTeXString)object, writer);
+			} else {
+                            throw new IllegalArgumentException();
 			}
 
 			separator = "\n\n";
@@ -61,8 +95,23 @@ public class BibTeXFormatter {
 
 		format(comment.getValue(), 1, writer);
 	}
+        
+        private String getFieldNameAndValueSeparator(){
+            final String separator = "=";
+            return (insertSpaceBetweenFieldNameAndValue ? 
+                    String.format(" %s ", separator) : 
+                    separator);
+        }
 
-	protected void format(BibTeXEntry entry, Writer writer) throws IOException {
+
+        private String getBibTeXEntryClosingBracket(){
+            final String closing = "}";
+            return (insertBibTeXEntryClosingBracketInNewLine ? 
+                    String.format("\n%s", closing) : 
+                    closing);
+        }
+
+        protected void format(BibTeXEntry entry, Writer writer) throws IOException {
 		writer.write("@");
 		format(entry.getType(), writer);
 
@@ -78,17 +127,18 @@ public class BibTeXFormatter {
 			writer.write(getIndent());
 
 			format(field.getKey(), writer);
-			writer.write(" = ");
+			writer.write(getFieldNameAndValueSeparator());
 			format(field.getValue(), 2, writer);
 
 			if(it.hasNext()){
-				writer.write(',');
+                            writer.write(',');
+                            writer.write('\n');
 			}
-
-			writer.write('\n');
 		}
-
-		writer.write('}');
+                if(insertCommaAfterLastFieldValueOfBibTeXEntry) {
+                    writer.write(',');
+                }
+		writer.write(getBibTeXEntryClosingBracket());
 	}
 
 	protected void format(BibTeXInclude include, Writer writer) throws IOException {
@@ -134,4 +184,46 @@ public class BibTeXFormatter {
 	public void setIndent(String indent){
 		this.indent = indent;
 	}
+
+    /**
+     * @return the insertSpaceBetweenFieldNameAndValue
+     */
+    public boolean isInsertSpaceBetweenFieldNameAndValue() {
+        return insertSpaceBetweenFieldNameAndValue;
+    }
+
+    /**
+     * @param insertSpaceBetweenFieldNameAndValue the insertSpaceBetweenFieldNameAndValue to set
+     */
+    public void setInsertSpaceBetweenFieldNameAndValue(boolean insertSpaceBetweenFieldNameAndValue) {
+        this.insertSpaceBetweenFieldNameAndValue = insertSpaceBetweenFieldNameAndValue;
+    }
+
+    /**
+     * @return the insertBibTeXEntryClosingBracketInNewLine
+     */
+    public boolean isInsertBibTeXEntryClosingBracketInNewLine() {
+        return insertBibTeXEntryClosingBracketInNewLine;
+    }
+
+    /**
+     * @param insertBibTeXEntryClosingBracketInNewLine the insertBibTeXEntryClosingBracketInNewLine to set
+     */
+    public void setInsertBibTeXEntryClosingBracketInNewLine(boolean insertBibTeXEntryClosingBracketInNewLine) {
+        this.insertBibTeXEntryClosingBracketInNewLine = insertBibTeXEntryClosingBracketInNewLine;
+    }
+
+    /**
+     * @return the insertCommaAfterLastFieldValueOfBibTeXEntry
+     */
+    public boolean isInsertCommaAfterLastFieldValueOfBibTeXEntry() {
+        return insertCommaAfterLastFieldValueOfBibTeXEntry;
+    }
+
+    /**
+     * @param insertCommaAfterLastFieldValueOfBibTeXEntry the insertCommaAfterLastFieldValueOfBibTeXEntry to set
+     */
+    public void setInsertCommaAfterLastFieldValueOfBibTeXEntry(boolean insertCommaAfterLastFieldValueOfBibTeXEntry) {
+        this.insertCommaAfterLastFieldValueOfBibTeXEntry = insertCommaAfterLastFieldValueOfBibTeXEntry;
+    }
 }
