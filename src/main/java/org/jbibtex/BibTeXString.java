@@ -3,31 +3,36 @@
  */
 package org.jbibtex;
 
-public class BibTeXString extends BibTeXObject {
+public class BibTeXString implements KeyValueBibTeXObject {
+    private Key key = null;
+    private Value value = null;
 
-	private Key key = null;
+    public BibTeXString(Key key, Value value){
+        setKey(key);
+        setValue(value);
+    }
 
-	private Value value = null;
+    @Override
+    public Key getKey(){
+        return this.key;
+    }
 
+    private void setKey(Key key){
+        this.key = key;
+    }
 
-	public BibTeXString(Key key, Value value){
-		setKey(key);
-		setValue(value);
-	}
+    @Override
+    public Value getValue(){
+        return this.value;
+    }
 
-	public Key getKey(){
-		return this.key;
-	}
+    private void setValue(Value value){
+        this.value = value;
+    }
 
-	private void setKey(Key key){
-		this.key = key;
-	}
-
-	public Value getValue(){
-		return this.value;
-	}
-
-	private void setValue(Value value){
-		this.value = value;
-	}
+    @Override
+    public void accept(final BibTeXObjectVisitor visitor) {
+       visitor.visit(this);
+    }
+              
 }

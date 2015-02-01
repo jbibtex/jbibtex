@@ -3,31 +3,34 @@
  */
 package org.jbibtex;
 
-public class BibTeXInclude extends BibTeXObject {
+public class BibTeXInclude implements SingleValueBibTeXObject {
+    private StringValue value = null;
+    private BibTeXDatabase database = null;
 
-	private StringValue value = null;
+    public BibTeXInclude(StringValue value, BibTeXDatabase database){
+        setValue(value);
+        setDatabase(database);
+    }
 
-	private BibTeXDatabase database = null;
+    @Override
+    public StringValue getValue(){
+        return this.value;
+    }
 
+    private void setValue(StringValue value){
+        this.value = value;
+    }
 
-	public BibTeXInclude(StringValue value, BibTeXDatabase database){
-		setValue(value);
-		setDatabase(database);
-	}
+    public BibTeXDatabase getDatabase(){
+        return this.database;
+    }
 
-	public StringValue getValue(){
-		return this.value;
-	}
+    private void setDatabase(BibTeXDatabase database){
+        this.database = database;
+    }
 
-	private void setValue(StringValue value){
-		this.value = value;
-	}
-
-	public BibTeXDatabase getDatabase(){
-		return this.database;
-	}
-
-	private void setDatabase(BibTeXDatabase database){
-		this.database = database;
-	}
+    @Override
+    public void accept(final BibTeXObjectVisitor visitor) {
+        visitor.visit(this);
+    }
 }
