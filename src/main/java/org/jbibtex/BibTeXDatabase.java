@@ -8,41 +8,27 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class BibTeXDatabase {
-
+public class BibTeXDatabase implements BibTeXObject {
 	private List<BibTeXObject> objects = new ArrayList<BibTeXObject>();
-
 	private List<BibTeXInclude> includes = new ArrayList<BibTeXInclude>();
-
 	private KeyMap<BibTeXString> strings = new KeyMap<BibTeXString>();
-
 	private KeyMap<BibTeXEntry> entries = new KeyMap<BibTeXEntry>();
 
-
 	public void addObject(BibTeXObject object){
-		boolean success;
+		final boolean success;
 
 		if(object instanceof BibTeXInclude){
-			BibTeXInclude include = (BibTeXInclude)object;
-
-			success = this.includes.add(include);
-		} else
-
-		if(object instanceof BibTeXString){
-			BibTeXString string = (BibTeXString)object;
-
-			success = this.strings.putIfMissing(string.getKey(), string);
-		} else
-
-		if(object instanceof BibTeXEntry){
-			BibTeXEntry entry = (BibTeXEntry)object;
-
-			success = this.entries.putIfMissing(entry.getKey(), entry);
-		} else
-
-		{
-			success = true;
-		} // End if
+                    BibTeXInclude include = (BibTeXInclude)object;
+                    success = this.includes.add(include);
+		} else if(object instanceof BibTeXString){
+                    BibTeXString string = (BibTeXString)object;
+                    success = this.strings.putIfMissing(string.getKey(), string);
+		} else if(object instanceof BibTeXEntry){
+                    BibTeXEntry entry = (BibTeXEntry)object;
+                    success = this.entries.putIfMissing(entry.getKey(), entry);
+		} else {
+                    success = true;
+		} 
 
 		if(success){
 			this.objects.add(object);
@@ -54,25 +40,16 @@ public class BibTeXDatabase {
 
 		if(object instanceof BibTeXInclude){
 			BibTeXInclude include = (BibTeXInclude)object;
-
 			success = this.includes.remove(include);
-		} else
-
-		if(object instanceof BibTeXString){
+		} else if(object instanceof BibTeXString){
 			BibTeXString string = (BibTeXString)object;
-
 			success = this.strings.removeIfPresent(string.getKey());
-		} else
-
-		if(object instanceof BibTeXEntry){
+		} else if(object instanceof BibTeXEntry){
 			BibTeXEntry entry = (BibTeXEntry)object;
-
 			success = this.entries.removeIfPresent(entry.getKey());
-		} else
-
-		{
+		} else {
 			success = true;
-		} // End if
+		} 
 
 		if(success){
 			this.objects.remove(object);
@@ -87,7 +64,6 @@ public class BibTeXDatabase {
 		BibTeXString string = this.strings.get(key);
 
 		if(string == null){
-
 			for(BibTeXInclude include : this.includes){
 				BibTeXDatabase database = include.getDatabase();
 
@@ -109,7 +85,6 @@ public class BibTeXDatabase {
 		BibTeXEntry entry = this.entries.get(key);
 
 		if(entry == null){
-
 			for(BibTeXInclude include : this.includes){
 				BibTeXDatabase database = include.getDatabase();
 
@@ -126,4 +101,11 @@ public class BibTeXDatabase {
 	public Map<Key, BibTeXEntry> getEntries(){
 		return Collections.unmodifiableMap(this.entries);
 	}
+
+    @Override
+    public void accept(final BibTeXObjectVisitor visitor) {
+        for(BibTeXObject object : objects){
+            object.accept(visitor);
+        }
+    }
 }
