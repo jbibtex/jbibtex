@@ -329,7 +329,7 @@ TOKEN :
 	|
 	< #NAME_START_SYMBOL : ["(", "-", "_"] >
 	|
-	< #NAME_CONTINUATION_SYMBOL : ["!", "'", "(", ")", "+", "-", ".", "/", ":", "?", "_"] >
+	< #NAME_CONTINUATION_SYMBOL : ["!", "'", "(", ")", "*", "+", "-", ".", "/", ":", "?", "_"] >
 }
 
 private BibTeXDatabase Database(boolean performErrorRecovery) :
