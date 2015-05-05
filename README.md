@@ -5,14 +5,14 @@ Java BibTeX and LaTeX parser and formatter library
 
 # Installation #
 
-The current version of JBibTeX is **1.0.14** (7 July, 2014).
+The current version of JBibTeX is **1.0.15** (5 May, 2015).
 
 The library JAR file (together with source and javadoc JAR files) is distributed via Maven Central repository:
 ```xml
 <dependency>
 	<groupId>org.jbibtex</groupId>
 	<artifactId>jbibtex</artifactId>
-	<version>1.0.14/version>
+	<version>1.0.15</version>
 </dependency>
 ```
 
