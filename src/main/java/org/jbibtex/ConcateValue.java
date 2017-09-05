@@ -9,6 +9,7 @@ public class ConcateValue extends Value {
 
 	private Value right = null;
 
+	public ConcateValue() {}
 
 	public ConcateValue(Value left, Value right){
 		setLeft(left);

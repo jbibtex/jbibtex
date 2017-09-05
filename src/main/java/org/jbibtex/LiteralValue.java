@@ -8,6 +8,7 @@ public class LiteralValue extends Value {
 
 	private String string = null;
 
+	public LiteralValue() {}
 
 	public LiteralValue(String string){
 		setString(string);

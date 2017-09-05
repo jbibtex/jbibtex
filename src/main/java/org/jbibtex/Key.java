@@ -12,6 +12,7 @@ public class Key {
 	transient
 	private String normalizedValue = null;
 
+	public Key() {}
 
 	public Key(String value){
 		setValue(value);

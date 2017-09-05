@@ -7,6 +7,7 @@ public class KeyValue extends Value {
 
 	private String string = null;
 
+	public KeyValue() {}
 
 	public KeyValue(String string){
 		setString(string);
