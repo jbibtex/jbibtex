@@ -7,6 +7,7 @@ public class StringValue extends LiteralValue {
 
 	private Style style = null;
 
+	public StringValue() {}
 
 	public StringValue(String string, Style style){
 		super(string);

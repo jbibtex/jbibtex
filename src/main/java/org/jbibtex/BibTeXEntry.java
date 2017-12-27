@@ -3,9 +3,12 @@
  */
 package org.jbibtex;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Collections;
 import java.util.Map;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BibTeXEntry extends BibTeXObject {
 
 	private Key type = null;
@@ -14,6 +17,7 @@ public class BibTeXEntry extends BibTeXObject {
 
 	private KeyMap<Value> fields = new KeyMap<Value>();
 
+	public BibTeXEntry() {}
 
 	public BibTeXEntry(Key type, Key key){
 		setType(type);

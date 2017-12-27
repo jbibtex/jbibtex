@@ -3,12 +3,16 @@
  */
 package org.jbibtex;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ReferenceValue extends Value implements Resolvable {
 
 	private KeyValue value = null;
 
 	private BibTeXString string = null;
 
+	public ReferenceValue() {}
 
 	public ReferenceValue(KeyValue value, BibTeXString string){
 		setValue(value);

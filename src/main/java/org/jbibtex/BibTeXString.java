@@ -9,6 +9,7 @@ public class BibTeXString extends BibTeXObject {
 
 	private Value value = null;
 
+	public BibTeXString() {}
 
 	public BibTeXString(Key key, Value value){
 		setKey(key);

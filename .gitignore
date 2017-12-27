@@ -1,0 +1,25 @@
+# JavaCC generated files
+src/main/java/org/jbibtex/LaTeXParser.java
+src/main/java/org/jbibtex/LaTeXParserConstants.java
+src/main/java/org/jbibtex/LaTeXParserTokenManager.java
+src/main/java/org/jbibtex/BibTeXParser.java
+src/main/java/org/jbibtex/BibTeXParserConstants.java
+src/main/java/org/jbibtex/BibTeXParserTokenManager.java
+src/main/java/org/jbibtex/ParseException.java
+src/main/java/org/jbibtex/Provider.java
+src/main/java/org/jbibtex/SimpleCharStream.java
+src/main/java/org/jbibtex/StreamProvider.java
+src/main/java/org/jbibtex/StringProvider.java
+src/main/java/org/jbibtex/Token.java
+src/main/java/org/jbibtex/TokenMgrException.java
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+/target
+*.iml

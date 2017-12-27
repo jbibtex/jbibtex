@@ -9,6 +9,7 @@ public class BibTeXInclude extends BibTeXObject {
 
 	private BibTeXDatabase database = null;
 
+	public BibTeXInclude() {}
 
 	public BibTeXInclude(StringValue value, BibTeXDatabase database){
 		setValue(value);
