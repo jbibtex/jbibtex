@@ -12,7 +12,7 @@ public class KeyMapTest {
 
 	@Test
 	public void putAndRemove(){
-		KeyMap<Object> map = new KeyMap<Object>();
+		KeyMap<Object> map = new KeyMap<>();
 
 		assertTrue(map.putIfMissing(new Key("Test"), null));
 		assertFalse(map.putIfMissing(new Key("test"), null));

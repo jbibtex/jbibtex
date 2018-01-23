@@ -297,7 +297,7 @@ public class LaTeXPrinter {
 		COMMAND_SYMBOLS.put(name, symbol);
 	}
 
-	private static final Map<String, String> COMMAND_SYMBOLS = new LinkedHashMap<String, String>();
+	private static final Map<String, String> COMMAND_SYMBOLS = new LinkedHashMap<>();
 
 	static {
 		// Special symbols
