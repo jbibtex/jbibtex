@@ -6,6 +6,8 @@ package org.jbibtex;
 import java.util.Collections;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class BibTeXEntry extends BibTeXObject {
 
 	private Key type = null;
@@ -23,6 +25,7 @@ public class BibTeXEntry extends BibTeXObject {
 		setKey(key);
 	}
 
+	@JsonIgnore
 	public BibTeXEntry getCrossReference(){
 		Value value = this.fields.get(KEY_CROSSREF);
 

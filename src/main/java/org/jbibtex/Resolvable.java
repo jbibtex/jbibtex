@@ -3,7 +3,10 @@
  */
 package org.jbibtex;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public interface Resolvable {
 
+	@JsonIgnore
 	boolean isResolved();
 }

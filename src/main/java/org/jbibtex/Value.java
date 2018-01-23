@@ -5,6 +5,11 @@ package org.jbibtex;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+@JsonTypeInfo (
+	use = JsonTypeInfo.Id.CLASS
+)
 abstract
 public class Value implements Serializable {
 

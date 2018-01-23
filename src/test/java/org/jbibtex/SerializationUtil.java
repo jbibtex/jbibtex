@@ -10,6 +10,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class SerializationUtil {
 
 	private SerializationUtil(){
@@ -41,5 +44,14 @@ public class SerializationUtil {
 		} finally {
 			ois.close();
 		}
+	}
+
+	static
+	public <E extends Serializable> E jsonClone(E object) throws IOException, JsonProcessingException {
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		String string = objectMapper.writeValueAsString(object);
+
+		return (E)objectMapper.readValue(string, object.getClass());
 	}
 }

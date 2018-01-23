@@ -3,7 +3,6 @@
  */
 package org.jbibtex;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -25,6 +24,7 @@ public class BibTeXParserTest {
 		BibTeXDatabase database = parseFully(parser, "/bibtex.bib");
 
 		ensureSerializability(database);
+		ensureJsonSerializability(database);
 
 		Map<Key, BibTeXEntry> entries = database.getEntries();
 
@@ -45,6 +45,7 @@ public class BibTeXParserTest {
 		BibTeXDatabase database = parse(parser, "/java.bib");
 
 		ensureSerializability(database);
+		ensureJsonSerializability(database);
 
 		List<BibTeXObject> objects = database.getObjects();
 		assertEquals(4498, objects.size());
@@ -76,6 +77,7 @@ public class BibTeXParserTest {
 		BibTeXDatabase database = parse(parser, "/mendeley.bib");
 
 		ensureSerializability(database);
+		ensureJsonSerializability(database);
 	}
 
 	@Test
@@ -90,6 +92,7 @@ public class BibTeXParserTest {
 		BibTeXDatabase database = parse(parser, "/unix.bib");
 
 		ensureSerializability(database);
+		ensureJsonSerializability(database);
 
 		List<BibTeXObject> objects = database.getObjects();
 		assertEquals(2632, objects.size());
@@ -122,6 +125,7 @@ public class BibTeXParserTest {
 		BibTeXDatabase database = parse(parser, "/zotero.bib");
 
 		ensureSerializability(database);
+		ensureJsonSerializability(database);
 	}
 
 	static
@@ -130,7 +134,20 @@ public class BibTeXParserTest {
 
 		try {
 			clonedDatabase = SerializationUtil.clone(database);
-		} catch(IOException ioe){
+		} catch(Exception e){
+			throw new AssertionError();
+		}
+
+		assertEquals((database.getObjects()).size(), (clonedDatabase.getObjects()).size());
+	}
+
+	static
+	private void ensureJsonSerializability(BibTeXDatabase database){
+		BibTeXDatabase clonedDatabase;
+
+		try {
+			clonedDatabase = SerializationUtil.jsonClone(database);
+		} catch(Exception e){
 			throw new AssertionError();
 		}
 
