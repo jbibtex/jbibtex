@@ -3,12 +3,13 @@
  */
 package org.jbibtex;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class BibTeXDatabase {
+public class BibTeXDatabase implements Serializable {
 
 	private List<BibTeXObject> objects = new ArrayList<BibTeXObject>();
 

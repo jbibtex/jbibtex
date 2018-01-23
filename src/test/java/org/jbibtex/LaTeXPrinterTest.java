@@ -7,20 +7,11 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class LaTeXPrinterTest {
-
-	private LaTeXParser parser = null;
-
-
-	@Before
-	public void init() throws ParseException {
-		this.parser = new LaTeXParser();
-	}
 
 	@Test
 	public void printDash() throws Exception {
@@ -70,10 +61,12 @@ public class LaTeXPrinterTest {
 	}
 
 	private List<LaTeXObject> parse(String string) throws Exception {
+		LaTeXParser parser = new LaTeXParser();
+
 		Reader reader = new StringReader(string);
 
 		try {
-			return this.parser.parse(reader);
+			return parser.parse(reader);
 		} finally {
 			reader.close();
 		}

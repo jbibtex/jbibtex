@@ -3,8 +3,10 @@
  */
 package org.jbibtex;
 
+import java.io.Serializable;
+
 abstract
-public class BibTeXObject {
+public class BibTeXObject implements Serializable {
 
 	BibTeXObject(){
 	}

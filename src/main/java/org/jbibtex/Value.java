@@ -3,8 +3,10 @@
  */
 package org.jbibtex;
 
+import java.io.Serializable;
+
 abstract
-public class Value {
+public class Value implements Serializable {
 
 	Value(){
 	}

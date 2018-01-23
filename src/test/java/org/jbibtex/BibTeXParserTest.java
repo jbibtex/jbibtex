@@ -3,6 +3,7 @@
  */
 package org.jbibtex;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -23,6 +24,8 @@ public class BibTeXParserTest {
 
 		BibTeXDatabase database = parseFully(parser, "/bibtex.bib");
 
+		ensureSerializability(database);
+
 		Map<Key, BibTeXEntry> entries = database.getEntries();
 
 		assertNotNull(entries.get(new Key("post_error")));
@@ -40,6 +43,8 @@ public class BibTeXParserTest {
 		parser.addMacro("ack-kl", "Ken Lunde");
 
 		BibTeXDatabase database = parse(parser, "/java.bib");
+
+		ensureSerializability(database);
 
 		List<BibTeXObject> objects = database.getObjects();
 		assertEquals(4498, objects.size());
@@ -68,7 +73,9 @@ public class BibTeXParserTest {
 	public void parseMendeley() throws Exception {
 		BibTeXParser parser = new BibTeXParser();
 
-		parse(parser, "/mendeley.bib");
+		BibTeXDatabase database = parse(parser, "/mendeley.bib");
+
+		ensureSerializability(database);
 	}
 
 	@Test
@@ -81,6 +88,8 @@ public class BibTeXParserTest {
 		parser.addMacro("ack-rfb", "Ronald F. Boisvert");
 
 		BibTeXDatabase database = parse(parser, "/unix.bib");
+
+		ensureSerializability(database);
 
 		List<BibTeXObject> objects = database.getObjects();
 		assertEquals(2632, objects.size());
@@ -110,7 +119,22 @@ public class BibTeXParserTest {
 	public void parseZotero() throws Exception {
 		BibTeXParser parser = new BibTeXParser();
 
-		parse(parser, "/zotero.bib");
+		BibTeXDatabase database = parse(parser, "/zotero.bib");
+
+		ensureSerializability(database);
+	}
+
+	static
+	private void ensureSerializability(BibTeXDatabase database){
+		BibTeXDatabase clonedDatabase;
+
+		try {
+			clonedDatabase = SerializationUtil.clone(database);
+		} catch(IOException ioe){
+			throw new AssertionError();
+		}
+
+		assertEquals((database.getObjects()).size(), (clonedDatabase.getObjects()).size());
 	}
 
 	static

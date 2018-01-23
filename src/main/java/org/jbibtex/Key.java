@@ -3,9 +3,10 @@
  */
 package org.jbibtex;
 
+import java.io.Serializable;
 import java.util.Locale;
 
-public class Key {
+public class Key implements Serializable {
 
 	private String value = null;
 
