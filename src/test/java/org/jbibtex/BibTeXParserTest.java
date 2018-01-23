@@ -28,7 +28,8 @@ public class BibTeXParserTest {
 
 		Map<Key, BibTeXEntry> entries = database.getEntries();
 
-		assertNotNull(entries.get(new Key("post_error")));
+		assertNotNull(entries.get(new Key("first")));
+		assertNotNull(entries.get(new Key("last")));
 
 		List<Exception> exceptions = parser.getExceptions();
 

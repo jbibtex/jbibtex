@@ -499,21 +499,25 @@ private BibTeXEntry Entry() :
 	(
 		<LPAREN> 
 		(
-			LOOKAHEAD( Identifier() <COMMA> )
-			key = Identifier() <COMMA> fields = AssignmentList()
+			LOOKAHEAD( Identifier() <COMMA> <RPAREN> )
+			key = Identifier() <COMMA> { fields = Collections.emptyList(); } <RPAREN>
 			|
-			( <COMMA> )? fields = AssignmentList()
+			LOOKAHEAD( Identifier() <COMMA> )
+			key = Identifier() <COMMA> fields = AssignmentList() ( <COMMA> )? <RPAREN>
+			|
+			( <COMMA> )? fields = AssignmentList() ( <COMMA> )? <RPAREN>
 		)
-		( <COMMA> )? <RPAREN>
 		|
 		<LBRACE> 
 		(
-			LOOKAHEAD( Identifier() <COMMA> )
-			key = Identifier() <COMMA> fields = AssignmentList()
+			LOOKAHEAD( Identifier() <COMMA> <RBRACE> )
+			key = Identifier() <COMMA> { fields = Collections.emptyList(); } <RBRACE>
 			|
-			( <COMMA> )? fields = AssignmentList()
+			LOOKAHEAD( Identifier() <COMMA> )
+			key = Identifier() <COMMA> fields = AssignmentList() ( <COMMA> )? <RBRACE>
+			|
+			( <COMMA> )? fields = AssignmentList() ( <COMMA> )? <RBRACE>
 		)
-		( <COMMA> )? <RBRACE>
 	)
 
 	{
