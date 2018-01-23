@@ -11,6 +11,9 @@ public class LaTeXGroup extends LaTeXObject {
 	private List<LaTeXObject> objects = null;
 
 
+	LaTeXGroup(){
+	}
+
 	public LaTeXGroup(List<LaTeXObject> objects){
 		setObjects(objects);
 	}

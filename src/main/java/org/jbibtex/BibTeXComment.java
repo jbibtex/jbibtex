@@ -8,6 +8,9 @@ public class BibTeXComment extends BibTeXObject {
 	private StringValue value = null;
 
 
+	BibTeXComment(){
+	}
+
 	public BibTeXComment(StringValue value){
 		setValue(value);
 	}

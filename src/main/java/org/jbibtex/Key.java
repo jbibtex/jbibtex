@@ -13,6 +13,9 @@ public class Key {
 	private String normalizedValue = null;
 
 
+	Key(){
+	}
+
 	public Key(String value){
 		setValue(value);
 	}

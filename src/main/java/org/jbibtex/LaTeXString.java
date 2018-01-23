@@ -8,6 +8,9 @@ public class LaTeXString extends LaTeXObject {
 	private String value = null;
 
 
+	LaTeXString(){
+	}
+
 	public LaTeXString(String value){
 		setValue(value);
 	}

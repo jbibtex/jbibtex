@@ -8,6 +8,9 @@ public class BibTeXPreamble extends BibTeXObject {
 	private Value value = null;
 
 
+	BibTeXPreamble(){
+	}
+
 	public BibTeXPreamble(Value value){
 		setValue(value);
 	}

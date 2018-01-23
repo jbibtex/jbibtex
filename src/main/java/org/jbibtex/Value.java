@@ -6,6 +6,9 @@ package org.jbibtex;
 abstract
 public class Value {
 
+	Value(){
+	}
+
 	abstract
 	protected String format();
 

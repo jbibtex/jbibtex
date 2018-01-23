@@ -5,6 +5,9 @@ package org.jbibtex;
 
 public class DigitStringValue extends LiteralValue {
 
+	DigitStringValue(){
+	}
+
 	public DigitStringValue(String string){
 		super(string);
 	}

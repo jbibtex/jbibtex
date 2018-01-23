@@ -8,6 +8,9 @@ public class LaTeXCommand extends LaTeXObject {
 	private String name = null;
 
 
+	LaTeXCommand(){
+	}
+
 	public LaTeXCommand(String name){
 		setName(name);
 	}

@@ -5,4 +5,7 @@ package org.jbibtex;
 
 abstract
 public class BibTeXObject {
+
+	BibTeXObject(){
+	}
 }
