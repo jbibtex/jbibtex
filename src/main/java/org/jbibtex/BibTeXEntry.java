@@ -3,7 +3,10 @@
  */
 package org.jbibtex;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BibTeXEntry extends BibTeXObject {
 
@@ -11,14 +14,18 @@ public class BibTeXEntry extends BibTeXObject {
 
 	private Key key = null;
 
-	private KeyMap<Value> fields = new KeyMap<Value>();
+	private KeyMap<Value> fields = new KeyMap<>();
 
+
+	BibTeXEntry(){
+	}
 
 	public BibTeXEntry(Key type, Key key){
 		setType(type);
 		setKey(key);
 	}
 
+	@JsonIgnore
 	public BibTeXEntry getCrossReference(){
 		Value value = this.fields.get(KEY_CROSSREF);
 

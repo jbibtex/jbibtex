@@ -3,17 +3,21 @@
  */
 package org.jbibtex;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
-public class BibTeXDatabase {
+public class BibTeXDatabase implements Serializable {
 
-	private List<BibTeXObject> objects = new ArrayList<BibTeXObject>();
+	private List<BibTeXObject> objects = new ArrayList<>();
 
-	private List<BibTeXInclude> includes = new ArrayList<BibTeXInclude>();
+	private List<BibTeXInclude> includes = new ArrayList<>();
 
-	private KeyMap<BibTeXString> strings = new KeyMap<BibTeXString>();
+	private KeyMap<BibTeXString> strings = new KeyMap<>();
 
-	private KeyMap<BibTeXEntry> entries = new KeyMap<BibTeXEntry>();
+	private KeyMap<BibTeXEntry> entries = new KeyMap<>();
 
 
 	public void addObject(BibTeXObject object){

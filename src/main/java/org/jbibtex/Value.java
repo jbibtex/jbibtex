@@ -3,8 +3,18 @@
  */
 package org.jbibtex;
 
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+@JsonTypeInfo (
+	use = JsonTypeInfo.Id.CLASS
+)
 abstract
-public class Value {
+public class Value implements Serializable {
+
+	Value(){
+	}
 
 	abstract
 	protected String format();

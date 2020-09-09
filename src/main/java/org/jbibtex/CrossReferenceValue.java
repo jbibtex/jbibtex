@@ -10,6 +10,9 @@ public class CrossReferenceValue extends Value implements Resolvable {
 	private BibTeXEntry entry = null;
 
 
+	CrossReferenceValue(){
+	}
+
 	public CrossReferenceValue(Value value, BibTeXEntry entry){
 		setValue(value);
 		setEntry(entry);

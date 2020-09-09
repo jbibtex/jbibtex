@@ -3,7 +3,7 @@
  */
 package org.jbibtex;
 
-import java.util.*;
+import java.util.LinkedHashMap;
 
 public class KeyMap <V> extends LinkedHashMap<Key, V> {
 
