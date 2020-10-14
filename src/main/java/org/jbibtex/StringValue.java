@@ -8,6 +8,9 @@ public class StringValue extends LiteralValue {
 	private Style style = null;
 
 
+	StringValue(){
+	}
+
 	public StringValue(String string, Style style){
 		super(string);
 

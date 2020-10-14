@@ -3,15 +3,19 @@
  */
 package org.jbibtex;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.Locale;
 
-public class Key {
+public class Key implements Serializable {
 
 	private String value = null;
 
 	transient
 	private String normalizedValue = null;
 
+
+	Key(){
+	}
 
 	public Key(String value){
 		setValue(value);

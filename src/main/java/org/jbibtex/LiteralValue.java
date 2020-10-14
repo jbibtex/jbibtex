@@ -9,6 +9,9 @@ public class LiteralValue extends Value {
 	private String string = null;
 
 
+	LiteralValue(){
+	}
+
 	public LiteralValue(String string){
 		setString(string);
 	}

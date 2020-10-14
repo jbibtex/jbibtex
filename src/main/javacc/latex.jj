@@ -1,20 +1,42 @@
 /*
  * Copyright (c) 2012 University of Tartu
  */
+options {
+	GENERATE_BOILERPLATE = false;
+	JAVA_TEMPLATE_TYPE = "modern";
+	JDK_VERSION = "1.5";
+	KEEP_LINE_COLUMN = true;
+	STATIC = false;
+}
+
 PARSER_BEGIN(LaTeXParser)
 package org.jbibtex;
 
-import java.io.*;
-import java.util.*;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LaTeXParser {
 
-	public LaTeXParser(){
-		this(new StringReader(""));
+	public LaTeXParser() throws ParseException {
+		this("");
 	}
 
-	public List<LaTeXObject> parse(Reader reader) throws IOException, ParseException {
-		ReInit(reader);
+	/**
+	 * @see LaTeXParser#parse(Reader)
+	 */
+	public List<LaTeXObject> parse(String string) throws ParseException, TokenMgrException {
+		return parse(new StringReader(string));
+	}
+
+	/**
+	 * @throws TokenMgrException If the input contains invalid characters
+	 *
+	 * @see CharacterFilterReader
+	 */
+	public List<LaTeXObject> parse(Reader reader) throws ParseException, TokenMgrException {
+		ReInit(new StreamProvider(reader));
 
 		return LaTeX();
 	}
@@ -34,25 +56,23 @@ TOKEN :
 <DEFAULT>
 TOKEN :
 {
+	< WHITESPACE : ["\t", "\n", " "] >
+	|
 	< SPECIAL : ["#", "$", "%", "&", "^", "_", "~"] >
 	|
-	< NON_SPECIAL : ["!"-"\"", "\'"-"/", ":"-"@", "[", "]", "`", "|", "\u007f"] >
+	< NON_SPECIAL : ["!"-"\"", "\'"-"/", ":"-"@", "[", "]", "`", "|", "\u007f", "\u2013", "\u2014", "\u2018", "\u2019", "\u201c", "\u201d", "\u2212"] >
 }
 
 <DEFAULT>
 TOKEN :
 {
-	< LETTER : ["a"-"z", "A"-"Z"] >
+	< ASCII_LETTER : ["a"-"z", "A"-"Z"] >
 	|
-	< NUMBER : ["0"-"9"] >
+	< ASCII_DIGIT : ["0"-"9"] >
 	|
-	< SUPPLEMENT : ["\u00a0"-"\u01ff"] >
-}
-
-<DEFAULT>
-TOKEN :
-{
-	< WHITESPACE : ["\t", "\n", " "] >
+	< LATIN_SUPPLEMENT : ["\u00a0"-"\u00ff"] >
+	|
+	< UNICODE_LETTER : ["\u0100"-"\u1fff", "\u20ac", "\u2122"] >
 }
 
 private List<LaTeXObject> LaTeX() :
@@ -125,7 +145,7 @@ private String Name() :
 	Token token;
 }
 {
-	token = <LETTER> { sb.append(token.image); } ( LOOKAHEAD( <LETTER> ) token = <LETTER> { sb.append(token.image); } )*
+	token = <ASCII_LETTER> { sb.append(token.image); } ( LOOKAHEAD( <ASCII_LETTER> ) token = <ASCII_LETTER> { sb.append(token.image); } )*
 
 	{
 		return sb.toString();
@@ -214,15 +234,17 @@ private String TextCharacter() :
 }
 {
 	(
+		token = <WHITESPACE>
+		|
 		token = <NON_SPECIAL>
 		|
-		token = <LETTER>
+		token = <ASCII_LETTER>
 		|
-		token = <NUMBER>
+		token = <ASCII_DIGIT>
 		|
-		token = <SUPPLEMENT>
+		token = <LATIN_SUPPLEMENT>
 		|
-		token = <WHITESPACE>
+		token = <UNICODE_LETTER>
 	)
 
 	{

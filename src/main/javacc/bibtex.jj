@@ -1,29 +1,92 @@
 /*
  * Copyright (c) 2012 University of Tartu
  */
+options {
+	JAVA_TEMPLATE_TYPE = "modern";
+	JDK_VERSION = "1.5";
+	KEEP_LINE_COLUMN = true;
+	STATIC = false;
+}
+
 PARSER_BEGIN(BibTeXParser)
 package org.jbibtex;
 
-import java.io.*;
-import java.util.*;
+import java.io.FileReader;
+import java.io.Reader;
+import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class BibTeXParser {
 
+	private KeyMap<BibTeXString> macros = new KeyMap<BibTeXString>();
+
 	private BibTeXDatabase database = null;
+
+	private List<Exception> exceptions = new ArrayList<Exception>();
 
 	private long id = 1L;
 
 
-	public BibTeXParser(){
-		this(new StringReader(""));
+	public BibTeXParser() throws ParseException, TokenMgrException {
+		this("");
+
+		// Default macros
+		addMacro("jan", "January");
+		addMacro("feb", "February");
+		addMacro("mar", "March");
+		addMacro("apr", "April");
+		addMacro("may", "May");
+		addMacro("jun", "June");
+		addMacro("jul", "July");
+		addMacro("aug", "August");
+		addMacro("sep", "September");
+		addMacro("oct", "October");
+		addMacro("nov", "November");
+		addMacro("dec", "December");
 	}
 
-	public BibTeXDatabase parse(Reader reader) throws IOException, ParseException {
-		ReInit(reader);
+	/**
+	 * Parses the BibTeX document in "normal" mode.
+	 * The parser throws an exception is an error condition is detected.
+	 *
+	 * @throws ObjectResolutionException If the database is inconsistent.
+	 *
+	 * @throws TokenMgrException If a token cannot be produced.
+	 * @throws ParseException If the produced sequence of tokens cannot be consumed.
+	 *
+	 * @see CharacterFilterReader
+	 */
+	public BibTeXDatabase parse(Reader reader) throws ObjectResolutionException, ParseException, TokenMgrException {
+		ReInit(new StreamProvider(reader));
 
 		token_source.SwitchTo(IN_HEADER);
 
-		return Database();
+		return Database(false);
+	}
+
+	/**
+	 * Parses the BibTeX document in "error recovery" mode.
+	 * The parser does its best to recover from typical error conditions by skipping the problematic object definition.
+	 * The parser maintains a {@link #getExceptions() list of exceptions}. This list is cleared when a parse method is invoked again.
+	 *
+	 * @throws ObjectResolutionException If the database is inconsistent.
+	 *
+	 * @see CharacterFilterReader
+	 */
+	public BibTeXDatabase parseFully(Reader reader) throws ObjectResolutionException {
+		ReInit(new StreamProvider(reader));
+
+		token_source.SwitchTo(IN_HEADER);
+
+		try {
+			return Database(true);
+		} catch(TokenMgrException tme){
+			throw new RuntimeException(tme);
+		} catch(ParseException pe){
+			throw new RuntimeException(pe);
+		}
 	}
 
 	/**
@@ -95,24 +158,28 @@ public class BibTeXParser {
 		this.database = database;
 	}
 
-	static
-	public KeyMap<BibTeXString> getMacros(){
-		return BibTeXParser.macros;
+	public List<Exception> getExceptions(){
+		return Collections.unmodifiableList(this.exceptions);
 	}
 
-	static
+	public KeyMap<BibTeXString> getMacros(){
+		return this.macros;
+	}
+
 	public void addMacro(String key, String value){
 		addMacro(new BibTeXString(new Key(key), new StringValue(value, StringValue.Style.BRACED)));
 	}
 
-	static
 	public void addMacro(BibTeXString macro){
-		BibTeXParser.macros.put(macro.getKey(), macro);
+		this.macros.put(macro.getKey(), macro);
 	}
 
-	static
+	public void removeMacro(String key){
+		this.macros.remove(new Key(key));
+	}
+
 	public void removeMacro(BibTeXString macro){
-		BibTeXParser.macros.remove(macro.getKey());
+		this.macros.remove(macro.getKey());
 	}
 
 	static
@@ -129,24 +196,6 @@ public class BibTeXParser {
 		
 		return (string.length() > 0);
 	}
-
-	private static final KeyMap<BibTeXString> macros = new KeyMap<BibTeXString>();
-
-	static {
-		addMacro("jan", "January");
-		addMacro("feb", "February");
-		addMacro("mar", "March");
-		addMacro("apr", "April");
-		addMacro("may", "May");
-		addMacro("jun", "June");
-		addMacro("jul", "July");
-		addMacro("aug", "August");
-		addMacro("sep", "September");
-		addMacro("oct", "October");
-		addMacro("nov", "November");
-		addMacro("dec", "December");
-	}
-
 
 	static
 	private class Field {
@@ -179,6 +228,13 @@ public class BibTeXParser {
 	}
 }
 PARSER_END(BibTeXParser)
+
+TOKEN_MGR_DECLS : {
+
+	void backup(int n){
+		input_stream.backup(n);
+	}
+}
 
 <IN_HEADER>
 SKIP :
@@ -261,26 +317,22 @@ TOKEN :
 <DEFAULT>
 TOKEN :
 {
-	< NAME : ( <ASCII_LETTER> | <ASCII_DIGIT> | <UNICODE_LETTER> | <NAME_START_SYMBOL> ) ( <ASCII_LETTER> | <ASCII_DIGIT> | <UNICODE_LETTER> | <NAME_CONTINUATION_SYMBOL> )* >
+	< NAME : ( <ASCII_LETTER> | <ASCII_DIGIT> | <LATIN_LETTER> | <UNICODE_LETTER> | <NAME_START_SYMBOL> ) ( <ASCII_LETTER> | <ASCII_DIGIT> | <LATIN_LETTER> | <UNICODE_LETTER> | <NAME_CONTINUATION_SYMBOL> )* >
 	|
 	< #ASCII_LETTER : ["a"-"z", "A"-"Z"] >
 	|
 	< #ASCII_DIGIT : ["0"-"9"] >
 	|
-	< #UNICODE_LETTER : 
-		[
-			"\u00c0"-"\u00d6", "\u00d8"-"\u00f6", "\u00f8"-"\u00ff",
-			"\u0100"-"\u1fff",
-			"\u20ac", "\u2122"
-		]
-	>
+	< #LATIN_LETTER : ["\u00c0"-"\u00d6", "\u00d8"-"\u00f6", "\u00f8"-"\u00ff"] >
 	|
-	< #NAME_START_SYMBOL : ["(", "-", "_"] >
+	< #UNICODE_LETTER : ["\u0100"-"\u1fff", "\u20ac", "\u2122"] >
 	|
-	< #NAME_CONTINUATION_SYMBOL : ["!", "'", "(", ")", "+", "-", ".", "/", ":", "?", "_"] >
+	< #NAME_START_SYMBOL : ["(", "-", "[", "_"] >
+	|
+	< #NAME_CONTINUATION_SYMBOL : ["!", "'", "(", ")", "*", "+", "-", ".", "/", ":", "?", "[", "]", "_"] >
 }
 
-private BibTeXDatabase Database() :
+private BibTeXDatabase Database(boolean performErrorRecovery) :
 {
 	BibTeXDatabase database = new BibTeXDatabase();
 
@@ -289,12 +341,34 @@ private BibTeXDatabase Database() :
 {
 	{
 		setDatabase(database);
+
+		this.exceptions.clear();
 	}
 
 	(
-		<COMMA>
-		|
-		object = Object() { database.addObject(object); } 
+		try {
+			<COMMA>
+			|
+			object = Object() { database.addObject(object); }
+		} catch(TokenMgrException tme){
+
+			if(!performErrorRecovery){
+				throw tme;
+			}
+
+			this.exceptions.add(tme);
+
+			SkipTo("@");
+		} catch(ParseException pe){
+
+			if(!performErrorRecovery){
+				throw pe;
+			}
+
+			this.exceptions.add(pe);
+
+			SkipTo("@");
+		}
 	)* <EOF>
 
 	{
@@ -425,21 +499,25 @@ private BibTeXEntry Entry() :
 	(
 		<LPAREN> 
 		(
-			LOOKAHEAD( Identifier() <COMMA> )
-			key = Identifier() <COMMA> fields = AssignmentList()
+			LOOKAHEAD( Identifier() <COMMA> <RPAREN> )
+			key = Identifier() <COMMA> { fields = Collections.emptyList(); } <RPAREN>
 			|
-			fields = AssignmentList()
+			LOOKAHEAD( Identifier() <COMMA> )
+			key = Identifier() <COMMA> fields = AssignmentList() ( <COMMA> )? <RPAREN>
+			|
+			( <COMMA> )? fields = AssignmentList() ( <COMMA> )? <RPAREN>
 		)
-		( <COMMA> )? <RPAREN>
 		|
 		<LBRACE> 
 		(
-			LOOKAHEAD( Identifier() <COMMA> )
-			key = Identifier() <COMMA> fields = AssignmentList()
+			LOOKAHEAD( Identifier() <COMMA> <RBRACE> )
+			key = Identifier() <COMMA> { fields = Collections.emptyList(); } <RBRACE>
 			|
-			fields = AssignmentList()
+			LOOKAHEAD( Identifier() <COMMA> )
+			key = Identifier() <COMMA> fields = AssignmentList() ( <COMMA> )? <RBRACE>
+			|
+			( <COMMA> )? fields = AssignmentList() ( <COMMA> )? <RBRACE>
 		)
-		( <COMMA> )? <RBRACE>
 	)
 
 	{
@@ -552,17 +630,19 @@ private Value SimpleValue() :
 	String string;
 
 	Token token;
+
+	Value result;
 }
 {
 	(
 		<LBRACE> string = Literal(1, "}")
 		{
-			return new StringValue(string, StringValue.Style.BRACED);
+			result = new StringValue(string, StringValue.Style.BRACED);
 		}
 		|
 		<QUOTE> string = Literal(0, "\"")
 		{
-			return new StringValue(string, StringValue.Style.QUOTED);
+			result = new StringValue(string, StringValue.Style.QUOTED);
 		}
 		|
 		token = Name()
@@ -576,19 +656,49 @@ private Value SimpleValue() :
 
 				BibTeXString object = getDatabase().resolveString(key);
 				if(object == null){
-					object = (BibTeXParser.getMacros()).get(key);
+					KeyMap<BibTeXString> macros = getMacros();
+
+					object = macros.get(key);
 				}
 
 				checkStringResolution(key, object);
 
-				return new ReferenceValue(value, object);
+				result = new ReferenceValue(value, object);
 			} else
 
 			{
-				return new DigitStringValue(token.image);
+				result = new DigitStringValue(token.image);
 			}
 		}
 	)
+	{
+		return result;
+	}
+}
+
+JAVACODE
+private void SkipTo(String symbol) throws ParseException {
+
+	if(symbol == null){
+		throw new IllegalArgumentException();
+	}
+
+	SetState(IN_LITERAL);
+
+	for(Token prevToken = null, token = getNextToken(); true; prevToken = token, token = getNextToken()){
+
+		if(token.kind == BibTeXParserConstants.EOF){
+			throw new ParseException("Reached unexpected EOF token");
+		} // End if
+
+		if(symbol.equals(token.image)){
+			break;
+		}
+	}
+
+	token_source.backup(symbol.length());
+
+	SetState(DEFAULT);
 }
 
 JAVACODE
@@ -599,12 +709,12 @@ private String Literal(int braceLevel, String delimiter) throws ParseException {
 		throw new IllegalArgumentException();
 	}
 
-	token_source.SwitchTo(IN_LITERAL);
+	SetState(IN_LITERAL);
 
 	for(Token prevToken = null, token = getNextToken(); true; prevToken = token, token = getNextToken()){
 
 		if(token.kind == BibTeXParserConstants.EOF){
-			throw new ParseException();
+			throw new ParseException("Reached unexpected EOF token");
 		}
 
 		boolean escaped = (prevToken != null && "\\".equals(prevToken.image));
@@ -618,7 +728,7 @@ private String Literal(int braceLevel, String delimiter) throws ParseException {
 			if("}".equals(token.image)){
 				braceLevel--;
 			}
-		}// End if
+		} // End if
 
 		if(delimiter.equals(token.image) && braceLevel == 0){
 			break;
@@ -627,7 +737,53 @@ private String Literal(int braceLevel, String delimiter) throws ParseException {
 		sb.append(token.image);
 	}
 
-	token_source.SwitchTo(DEFAULT);
+	SetState(DEFAULT);
 
 	return StringUtil.removeIndent(sb.toString());
+}
+
+/**
+ * JavaCC hack for doing lexical state transitions syntactically
+ *
+ * http://www.engr.mun.ca/~theo/JavaCC-FAQ/SetState.txt
+ */
+JAVACODE
+private void SetState(int state) {
+	if (state != token_source.curLexState) {
+		Token root = new Token(), last=root;
+		root.next = null;
+
+		// First, we build a list of tokens to push back, in backwards order
+		while (token.next != null) {
+			Token t = token;
+			// Find the token whose token.next is the last in the chain
+			while (t.next != null && t.next.next != null)
+				t = t.next;
+
+			// put it at the end of the new chain
+			last.next = t.next;
+			last = t.next;
+
+			// If there are special tokens, these go before the regular tokens,
+			// so we want to push them back onto the input stream in the order
+			// we find them along the specialToken chain.
+			if (t.next.specialToken != null) {
+				Token tt=t.next.specialToken;
+				while (tt != null) {
+					last.next = tt;
+					last = tt;
+					tt.next = null;
+					tt = tt.specialToken;
+				}
+			}
+			t.next = null;
+		};
+
+		while (root.next != null) {
+			token_source.backup(root.next.image.length());
+			root.next = root.next.next;
+		}
+		jj_ntk = -1;
+		token_source.SwitchTo(state);
+	}
 }

@@ -3,12 +3,13 @@
  */
 package org.jbibtex;
 
-import java.io.*;
-import java.util.*;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.List;
 
-import org.junit.*;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class LaTeXPrinterTest {
 
@@ -51,7 +52,6 @@ public class LaTeXPrinterTest {
 		assertEquals(LaTeXPrinter.today(), print("\\today"));
 	}
 
-	static
 	private String print(String string) throws Exception {
 		LaTeXPrinter printer = new LaTeXPrinter();
 
@@ -60,13 +60,12 @@ public class LaTeXPrinterTest {
 		return printer.print(objects);
 	}
 
-	static
 	private List<LaTeXObject> parse(String string) throws Exception {
+		LaTeXParser parser = new LaTeXParser();
+
 		Reader reader = new StringReader(string);
 
 		try {
-			LaTeXParser parser = new LaTeXParser();
-
 			return parser.parse(reader);
 		} finally {
 			reader.close();

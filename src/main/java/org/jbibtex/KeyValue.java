@@ -8,6 +8,9 @@ public class KeyValue extends Value {
 	private String string = null;
 
 
+	KeyValue(){
+	}
+
 	public KeyValue(String string){
 		setString(string);
 	}

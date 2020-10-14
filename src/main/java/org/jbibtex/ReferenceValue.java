@@ -10,6 +10,9 @@ public class ReferenceValue extends Value implements Resolvable {
 	private BibTeXString string = null;
 
 
+	ReferenceValue(){
+	}
+
 	public ReferenceValue(KeyValue value, BibTeXString string){
 		setValue(value);
 		setString(string);
