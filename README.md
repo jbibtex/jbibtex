@@ -1,4 +1,4 @@
-JBibTeX [![Build Status](https://travis-ci.org/jbibtex/jbibtex.png?branch=master)](https://travis-ci.org/jbibtex/jbibtex)
+JBibTeX [![Build Status](https://github.com/jbibtex/jbibtex/workflows/maven/badge.svg)](https://github.com/jbibtex/jbibtex/actions?query=workflow%3A%22maven%22)
 =======
 
 Java BibTeX and LaTeX parser and formatter library
