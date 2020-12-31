@@ -3,7 +3,7 @@
  */
 options {
 	JAVA_TEMPLATE_TYPE = "modern";
-	JDK_VERSION = "1.5";
+	JDK_VERSION = "1.8";
 	KEEP_LINE_COLUMN = true;
 	STATIC = false;
 }
