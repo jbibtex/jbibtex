@@ -11,6 +11,7 @@ options {
 PARSER_BEGIN(BibTeXParser)
 package org.jbibtex;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
 import java.util.Collections;
@@ -182,6 +183,15 @@ public class BibTeXParser {
 		this.macros.remove(macro.getKey());
 	}
 
+	private <E extends Exception> void handleException(E e, boolean performErrorRecovery) throws E {
+
+		if(!performErrorRecovery){
+			throw e;
+		}
+
+		this.exceptions.add(e);
+	}
+
 	static
 	private boolean isDigitString(String string){
 
@@ -195,6 +205,24 @@ public class BibTeXParser {
 		}
 		
 		return (string.length() > 0);
+	}
+
+	static
+	private BibTeXDatabase parseBibTeXDatabase(File file) throws ParseException {
+
+		try {
+			Reader reader = new FileReader(file);
+			
+			try {
+				BibTeXParser parser = new BibTeXParser();
+				
+				return parser.parse(reader);
+			} finally {
+				reader.close();
+			}
+		} catch(Exception e){
+			throw new ParseException(e.getMessage());
+		}
 	}
 
 	static
@@ -351,21 +379,11 @@ private BibTeXDatabase Database(boolean performErrorRecovery) :
 			|
 			object = Object() { database.addObject(object); }
 		} catch(TokenMgrException tme){
-
-			if(!performErrorRecovery){
-				throw tme;
-			}
-
-			this.exceptions.add(tme);
+			handleException(tme, performErrorRecovery);
 
 			SkipTo("@");
 		} catch(ParseException pe){
-
-			if(!performErrorRecovery){
-				throw pe;
-			}
-
-			this.exceptions.add(pe);
+			handleException(pe, performErrorRecovery);
 
 			SkipTo("@");
 		}
@@ -432,21 +450,7 @@ private BibTeXInclude Include():
 	)
 
 	{
-		BibTeXDatabase database;
-
-		try {
-			Reader reader = new FileReader(string);
-
-			try {
-				BibTeXParser parser = new BibTeXParser();
-
-				database = parser.parse(reader);
-			} finally {
-				reader.close();
-			}
-		} catch(Exception e){
-			throw new ParseException(e.getMessage());
-		}
+		BibTeXDatabase database = parseBibTeXDatabase(new File(string));
 
 		return new BibTeXInclude(new StringValue(string, StringValue.Style.BRACED), database);
 	}
