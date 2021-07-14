@@ -355,7 +355,7 @@ TOKEN :
 	|
 	< #UNICODE_LETTER : ["\u0100"-"\u1fff", "\u20ac", "\u2122"] >
 	|
-	< #NAME_START_SYMBOL : ["(", "-", "[", "_"] >
+	< #NAME_START_SYMBOL : ["(", "-", ".", "[", "_"] >
 	|
 	< #NAME_CONTINUATION_SYMBOL : ["!", "'", "(", ")", "*", "+", "-", ".", "/", ":", "?", "[", "]", "_"] >
 }
