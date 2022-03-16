@@ -345,7 +345,12 @@ TOKEN :
 <DEFAULT>
 TOKEN :
 {
-	< NAME : ( <ASCII_LETTER> | <ASCII_DIGIT> | <LATIN_LETTER> | <UNICODE_LETTER> | <NAME_START_SYMBOL> ) ( <ASCII_LETTER> | <ASCII_DIGIT> | <LATIN_LETTER> | <UNICODE_LETTER> | <NAME_CONTINUATION_SYMBOL> )* >
+	// NAME is a subtype (restriction) of IDENTIFIER, therefore it must be declared first
+	< NAME : ( <LETTER_OR_DIGIT> | <NAME_START_SYMBOL> ) ( <LETTER_OR_DIGIT> | <NAME_CONTINUATION_SYMBOL> )* >
+	|
+	< IDENTIFIER: ( <LETTER_OR_DIGIT> | <IDENTIFIER_START_SYMBOL> ) ( <LETTER_OR_DIGIT> | <IDENTIFIER_CONTINUATION_SYMBOL> )* >
+	|
+	< #LETTER_OR_DIGIT: ( <ASCII_LETTER> | <ASCII_DIGIT> | <LATIN_LETTER> | <UNICODE_LETTER> ) >
 	|
 	< #ASCII_LETTER : ["a"-"z", "A"-"Z"] >
 	|
@@ -355,9 +360,13 @@ TOKEN :
 	|
 	< #UNICODE_LETTER : ["\u0100"-"\u1fff", "\u20ac", "\u2122"] >
 	|
-	< #NAME_START_SYMBOL : ["(", "-", ".", "[", "_"] >
+	< #NAME_START_SYMBOL: [".", "_"] >
 	|
-	< #NAME_CONTINUATION_SYMBOL : ["!", "'", "(", ")", "*", "+", "-", ".", "/", ":", "?", "[", "]", "_"] >
+	< #NAME_CONTINUATION_SYMBOL: ["+", "-", ".", ":", "_"] >
+	|
+	< #IDENTIFIER_START_SYMBOL : ["(", "-", ".", "[", "_"] >
+	|
+	< #IDENTIFIER_CONTINUATION_SYMBOL : ["!", "'", "(", ")", "*", "+", "-", ".", "/", ":", "?", "[", "]", "_"] >
 }
 
 private BibTeXDatabase Database(boolean performErrorRecovery) :
@@ -563,20 +572,6 @@ private List<Field> AssignmentList() :
 	}
 }
 
-private Token Identifier() :
-{
-	Token token;
-}
-{
-	(
-		token = Name()
-	)
-
-	{
-		return token;
-	}
-}
-
 private Token Name() :
 {
 	Token token;
@@ -594,6 +589,30 @@ private Token Name() :
 		token = <NAME>
 	)
 
+	{
+		return token;
+	}
+}
+
+private Token Identifier() :
+{
+	Token token;
+}
+{
+	(
+		token = <COMMENT>
+		|
+		token = <INCLUDE>
+		|
+		token = <PREAMBLE>
+		|
+		token = <STRING>
+		|
+		token = <NAME>
+		|
+		token = <IDENTIFIER>
+	)
+	
 	{
 		return token;
 	}
@@ -649,7 +668,7 @@ private Value SimpleValue() :
 			result = new StringValue(string, StringValue.Style.QUOTED);
 		}
 		|
-		token = Name()
+		token = Identifier()
 		{
 			boolean digits = isDigitString(token.image);
 
