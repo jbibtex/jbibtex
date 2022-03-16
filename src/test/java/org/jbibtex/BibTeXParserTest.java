@@ -120,6 +120,16 @@ public class BibTeXParserTest {
 	}
 
 	@Test
+	public void parseWiley() throws Exception {
+		BibTeXParser parser = new BibTeXParser();
+
+		BibTeXDatabase database = parse(parser, "/wiley.bib");
+
+		ensureSerializability(database);
+		ensureJsonSerializability(database);
+	}
+
+	@Test
 	public void parseZotero() throws Exception {
 		BibTeXParser parser = new BibTeXParser();
 

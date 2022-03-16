@@ -366,7 +366,7 @@ TOKEN :
 	|
 	< #IDENTIFIER_START_SYMBOL : ["(", "-", ".", "[", "_"] >
 	|
-	< #IDENTIFIER_CONTINUATION_SYMBOL : ["!", "'", "(", ")", "*", "+", "-", ".", "/", ":", "?", "[", "]", "_"] >
+	< #IDENTIFIER_CONTINUATION_SYMBOL : ["!", "#", "$", "%", "&", "'", "(", ")", "*", "+", "-", ".", "/", ":", ";", "<", ">", "?", "[", "\\", "]", "^", "_", "|", "~" ] >
 }
 
 private BibTeXDatabase Database(boolean performErrorRecovery) :
