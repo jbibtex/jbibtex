@@ -184,6 +184,100 @@ public class LaTeXPrinter {
 						break;
 				}
 				break;
+				// Circumflex
+			case '^':
+				switch(c){
+				case 'A':
+					return '\u00c2';
+				case 'C':
+					return '\u0108';
+				case 'E':
+					return '\u00cA';
+				case 'I':
+					return '\u00ce';
+				case 'G':
+					return '\u011c';
+				case 'H':
+					return '\u0124';
+				case 'O':
+					return '\u00d4';
+				case 'U':
+					return '\u00db';
+				case 'S':
+					return '\u015c';
+				case 'W':
+					return '\u0174';
+				case 'Y':
+					return '\u0176';
+				case 'a':
+					return '\u00e2';
+				case 'c':
+					return '\u0109';
+				case 'e':
+					return '\u00ea';
+				case 'i':
+					return '\u00ee';
+				case 'g':
+					return '\u011d';
+				case 'h':
+					return '\u0125';
+				case 'o':
+					return '\u00f4';
+				case 'u':
+					return '\u00fb';
+				case 's':
+					return '\u015d';
+				case 'w':
+					return '\u0175';
+				case 'y':
+					return '\u0177';
+				default:
+					break;
+				}
+				break;
+				// Cedil
+			case 'c':
+				switch(c){
+				case 'C':
+					return '\u00c7';
+				case 'E':
+					return '\u0228';
+				case 'G':
+					return '\u0122';
+				case 'K':
+					return '\u0136';
+				case 'L':
+					return '\u013b';
+				case 'N':
+					return '\u0145';
+				case 'R':
+					return '\u0156';
+				case 'S':
+					return '\u015e';
+				case 'T':
+					return '\u0162';
+				case 'c':
+					return '\u00e7';
+				case 'e':
+					return '\u0229';
+				case 'g':
+					return '\u0123';
+				case 'k':
+					return '\u0137';
+				case 'l':
+					return '\u013c';
+				case 'n':
+					return '\u0146';
+				case 'r':
+					return '\u0157';
+				case 's':
+					return '\u015f';
+				case 't':
+					return '\u0163';
+				default:
+					break;
+				}
+				break;
 			// Diaeresis
 			case '\"':
 				switch(c){
@@ -306,7 +400,8 @@ public class LaTeXPrinter {
 		setSymbol("%", "%");
 		setSymbol("&", "&");
 		setSymbol("\\", "\\");
-		setSymbol("^", "^");
+		setSymbol("i", "i");
+		setSymbol("I", "I");
 		setSymbol("_", "_");
 		setSymbol("{", "{");
 		setSymbol("}", "}");
@@ -323,6 +418,7 @@ public class LaTeXPrinter {
 		setSymbol("ss", "\u00df");
 
 		// Text-mode commands
+		setSymbol("string", "");
 		setSymbol("textasciicircum", "^");
 		setSymbol("textasciitilde", "~");
 		setSymbol("textbackslash", "\\");

@@ -34,6 +34,10 @@
 			<id>villu.ruusmann</id>
 			<name>Villu Ruusmann</name>
 		</developer>
+		<developer>
+			<id>gallandarakhneorg</id>
+			<name>Stephane Galland</name>
+		</developer>
 	</developers>
 
 	<scm>
