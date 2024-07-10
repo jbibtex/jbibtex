@@ -6,6 +6,8 @@ package org.jbibtex;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -139,6 +141,24 @@ public class BibTeXParserTest {
 		ensureJsonSerializability(database);
 	}
 
+	@Test
+	public void parseCJK() throws Exception {
+		BibTeXParser parser = new BibTeXParser();
+
+		BibTeXDatabase database = parseFully(parser, "/cjk.bib", StandardCharsets.UTF_8);
+
+		ensureSerializability(database);
+		ensureJsonSerializability(database);
+
+		Map<Key, BibTeXEntry> entries = database.getEntries();
+
+		assertNotNull(entries.get(new Key("董玉祥2008海岸横向沙脊表面风沙流结构的野外观测研究")));
+
+		List<Exception> exceptions = parser.getExceptions();
+
+		assertEquals(0, exceptions.size());
+	}
+
 	static
 	private void ensureSerializability(BibTeXDatabase database){
 		BibTeXDatabase clonedDatabase;
@@ -184,10 +204,15 @@ public class BibTeXParserTest {
 
 	static
 	private BibTeXDatabase parseFully(BibTeXParser parser, String path) throws Exception {
+		return parseFully(parser, path, StandardCharsets.US_ASCII);
+	}
+
+	static
+	private BibTeXDatabase parseFully(BibTeXParser parser, String path, Charset charset) throws Exception {
 		InputStream is = (BibTeXParserTest.class).getResourceAsStream(path);
 
 		try {
-			Reader reader = new InputStreamReader(is, "US-ASCII");
+			Reader reader = new InputStreamReader(is, charset);
 
 			try {
 				return parser.parseFully(reader);
